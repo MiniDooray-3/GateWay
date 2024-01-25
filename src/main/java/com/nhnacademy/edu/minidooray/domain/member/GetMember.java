@@ -2,12 +2,13 @@ package com.nhnacademy.edu.minidooray.domain.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
-public class Member {
-    private Long memberNumber;
-    private Long projectId;
+@Setter
+public class GetMember {
+    private String role;
     private String memberId; // user_id
-    private String memberRole;
 }
+

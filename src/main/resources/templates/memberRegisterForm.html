@@ -7,6 +7,8 @@
 <body>
 <form method="post" action="/members/register">
   <span th:text="${userId}"/>: <input type="text" name="userId"/><br/>
+  <input type="hidden" name="projectId" th:value="${projectId}"/>
+  <input type="hidden" name="memberRole" th:value="MEMBER"/>
   <br/>
   <input type="submit" th:value="등록"/>
 </form>
