@@ -2,7 +2,7 @@ package com.nhnacademy.edu.minidooray.adapter;
 
 import com.nhnacademy.edu.minidooray.domain.User;
 
-public interface AccountAdapter {
+public interface AccountAdaptor {
 
 
     boolean matches(User user);

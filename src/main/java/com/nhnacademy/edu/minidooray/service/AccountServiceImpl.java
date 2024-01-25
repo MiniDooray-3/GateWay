@@ -1,16 +1,16 @@
 package com.nhnacademy.edu.minidooray.service;
 
-import com.nhnacademy.edu.minidooray.adapter.AccountAdapter;
+import com.nhnacademy.edu.minidooray.adapter.AccountAdaptor;
 import com.nhnacademy.edu.minidooray.domain.User;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    private final AccountAdapter accountAdapter;
+    private final AccountAdaptor accountAdapter;
 
 
-    public AccountServiceImpl(AccountAdapter accountAdapter) {
+    public AccountServiceImpl(AccountAdaptor accountAdapter) {
         this.accountAdapter = accountAdapter;
     }
 
