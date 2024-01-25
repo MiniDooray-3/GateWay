@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class AccountAdapterImpl implements AccountAdapter {
+public class AccountAdaptorImpl implements AccountAdaptor {
 
     private final RestTemplate restTemplate;
 
     private final AccountProperties accountProperties;
 
 
-    public AccountAdapterImpl(RestTemplate restTemplate, AccountProperties accountProperties) {
+    public AccountAdaptorImpl(RestTemplate restTemplate, AccountProperties accountProperties) {
         this.restTemplate = restTemplate;
         this.accountProperties = accountProperties;
     }

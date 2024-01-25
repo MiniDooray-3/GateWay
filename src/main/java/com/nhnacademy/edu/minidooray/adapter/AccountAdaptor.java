@@ -3,7 +3,7 @@ package com.nhnacademy.edu.minidooray.adapter;
 import com.nhnacademy.edu.minidooray.domain.login.LoginUser;
 import com.nhnacademy.edu.minidooray.domain.signup.SignupUser;
 
-public interface AccountAdapter {
+public interface AccountAdaptor {
 
 
     boolean matches(LoginUser user);
