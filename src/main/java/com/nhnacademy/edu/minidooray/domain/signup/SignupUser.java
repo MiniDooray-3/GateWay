@@ -13,11 +13,12 @@ import lombok.Setter;
 @Getter
 public class SignupUser {
     @NotBlank
-    String userId;
-
-    @NotBlank
-    String userPassword;
+    String id;
 
     @Email
     String email;
+
+    @NotBlank
+    String password;
+
 }

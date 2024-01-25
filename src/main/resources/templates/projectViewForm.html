@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project - View</title>
+</head>
+<body>
+<h1 class="h3 mb-3 fw-normal" th:text="${project.projectName}"></h1>
+
+<a th:href="@{/members/register/{projectId}(projectId=${project.projectId})}">멤버 등록</a>
+</body>
+</html>
