@@ -24,7 +24,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void signUp(SignupUser signupUser) {
         if (!accountAdapter.createUser(signupUser)) {
-            throw new UserAlreadyExistException(signupUser.getUserId());
+            throw new UserAlreadyExistException(signupUser.getId());
         }
     }
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project - List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">이름</th>
+        <th scope="col">상태</th>
+        <th scope="col">조회</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="project : ${projects}">
+        <th scope="row" th:text="${project.projectId}"></th>
+        <td th:text="${project.projectName}"></td>
+        <td th:text="${project.getProjectStatus()}"></td>
+        <td><a th:href="@{/projects/{projectId}(projectId=${project.projectId})}" th:text="조회"></a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

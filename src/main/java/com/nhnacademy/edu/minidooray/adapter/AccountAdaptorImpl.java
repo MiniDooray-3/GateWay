@@ -49,7 +49,7 @@ public class AccountAdaptorImpl implements AccountAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<SignupUser> entity = new HttpEntity<>(signupUser, httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(accountProperties.getPort() + "/api/signup",
+        ResponseEntity<Void> response = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/signup",
                 HttpMethod.POST,
                 entity,
                 new ParameterizedTypeReference<>() {
@@ -57,6 +57,4 @@ public class AccountAdaptorImpl implements AccountAdaptor {
 
         return HttpStatus.CREATED.equals(response.getStatusCode());
     }
-
-
 }
