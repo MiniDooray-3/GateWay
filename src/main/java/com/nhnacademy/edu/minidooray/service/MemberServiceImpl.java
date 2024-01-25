@@ -1,7 +1,8 @@
 package com.nhnacademy.edu.minidooray.service;
 
 import com.nhnacademy.edu.minidooray.adapter.MemberAdaptor;
-import com.nhnacademy.edu.minidooray.domain.member.Member;
+import com.nhnacademy.edu.minidooray.domain.member.GetMember;
+import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void createMember(Member member) {
+    public void createMember(RegisterMember member) {
         memberAdaptor.createMember(member);
     }
 
     @Override
-    public List<Member> getMembers(Long projectId) {
+    public List<GetMember> getMembers(Long projectId) {
         return memberAdaptor.getMembers(projectId);
     }
 

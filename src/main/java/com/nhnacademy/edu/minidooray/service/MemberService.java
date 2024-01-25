@@ -1,12 +1,13 @@
 package com.nhnacademy.edu.minidooray.service;
 
-import com.nhnacademy.edu.minidooray.domain.member.Member;
+import com.nhnacademy.edu.minidooray.domain.member.GetMember;
+import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
 import java.util.List;
 
 public interface MemberService {
 
-    void createMember(Member member);
+    void createMember(RegisterMember member);
 
-    List<Member> getMembers(Long projectId);
+    List<GetMember> getMembers(Long projectId);
 
 }
