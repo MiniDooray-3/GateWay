@@ -1,7 +1,9 @@
 package com.nhnacademy.edu.minidooray.service;
 
 import com.nhnacademy.edu.minidooray.adapter.AccountAdapter;
-import com.nhnacademy.edu.minidooray.domain.User;
+import com.nhnacademy.edu.minidooray.domain.login.LoginUser;
+import com.nhnacademy.edu.minidooray.domain.signup.SignupUser;
+import com.nhnacademy.edu.minidooray.exception.UserAlreadyExistException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +18,13 @@ public class AccountServiceImpl implements AccountService {
 
 
     public boolean matches(String userId, String userPassword) {
-        return accountAdapter.matches(new User(userId, userPassword));
+        return accountAdapter.matches(new LoginUser(userId, userPassword));
+    }
+
+    @Override
+    public void signUp(SignupUser signupUser) {
+        if (!accountAdapter.createUser(signupUser)) {
+            throw new UserAlreadyExistException(signupUser.getUserId());
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.nhnacademy.edu.minidooray.adapter;
 
-import com.nhnacademy.edu.minidooray.domain.User;
+import com.nhnacademy.edu.minidooray.domain.login.LoginUser;
+import com.nhnacademy.edu.minidooray.domain.signup.SignupUser;
 import com.nhnacademy.edu.minidooray.property.AccountProperties;
 import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,18 +27,36 @@ public class AccountAdapterImpl implements AccountAdapter {
         this.accountProperties = accountProperties;
     }
 
-    public boolean matches(User user) {
+    public boolean matches(LoginUser user) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<User> entity = new HttpEntity<>(user, httpHeaders);
+        HttpEntity<LoginUser> entity = new HttpEntity<>(user, httpHeaders);
         ResponseEntity<Void> response = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/login",
                 HttpMethod.POST,
                 entity,
-                new ParameterizedTypeReference<Void>() {
+                new ParameterizedTypeReference<>() {
                 });
 
         return HttpStatus.OK.equals(response.getStatusCode());
     }
+
+    @Override
+    public boolean createUser(SignupUser signupUser) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<SignupUser> entity = new HttpEntity<>(signupUser, httpHeaders);
+        ResponseEntity<Void> response = restTemplate.exchange(accountProperties.getPort() + "/api/signup",
+                HttpMethod.POST,
+                entity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return HttpStatus.CREATED.equals(response.getStatusCode());
+    }
+
+
 }
