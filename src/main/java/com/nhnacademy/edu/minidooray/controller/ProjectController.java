@@ -20,11 +20,6 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping
-    public String projectForm() {
-        return "projectForm";
-    }
-
     @GetMapping("/list")
     public String projectListForm(Model model, HttpServletRequest request) {
 

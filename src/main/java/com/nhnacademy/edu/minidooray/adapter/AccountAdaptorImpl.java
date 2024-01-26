@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -56,5 +57,25 @@ public class AccountAdaptorImpl implements AccountAdaptor {
                 });
 
         return HttpStatus.CREATED.equals(response.getStatusCode());
+    }
+
+    @Override
+    public boolean isExistUser(String userId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<Boolean> response = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/{userId}",
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<>() {
+                }, userId);
+
+        if (HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return Boolean.TRUE.equals(response.getBody());
     }
 }
