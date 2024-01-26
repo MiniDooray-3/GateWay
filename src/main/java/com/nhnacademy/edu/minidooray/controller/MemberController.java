@@ -42,7 +42,7 @@ public class MemberController {
     }
 
     @PostMapping("/members/register")
-    public String createMember(@RequestParam("projectId") Long projectId,
+    public String registerMember(@RequestParam("projectId") Long projectId,
                                @ModelAttribute RegisterMember member) {
         memberService.createMember(member);
 

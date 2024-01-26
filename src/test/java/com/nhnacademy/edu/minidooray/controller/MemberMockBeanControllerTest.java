@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.nhnacademy.edu.minidooray.adapter.MemberAdaptor;
 import com.nhnacademy.edu.minidooray.domain.member.GetMember;
 import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.hamcrest.Matchers;
@@ -38,32 +39,42 @@ class MemberMockBeanControllerTest {
 
     @Test
     @DisplayName("멤버 전부 조회")
-    void testGetMembers() throws Exception {
-        List<GetMember> mockMembers = Arrays.asList(
-                new GetMember("ADMIN", "hello"),
-                new GetMember("MEMBER", "dell")
-        );
-        when(adaptor.getMembers(1L)).thenReturn(mockMembers);
+    public void testGetMembers() throws Exception {
+        Long projectId = 1L;
+        List<GetMember> members = new ArrayList<>();
 
-        mockMvc.perform(get("/members/{project_id}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(view().name("memberList"))
-                .andExpect(model().attributeExists("members"))
-                .andExpect(model().attributeExists("projectName"))
-                .andExpect(jsonPath("$[0].memberId", Matchers.equalTo("hello")));
+        when(adaptor.getMembers(projectId)).thenReturn(members);
+
+        mockMvc.perform(get("/members/{project_id}", projectId))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("members"))
+                .andExpect(MockMvcResultMatchers.model().attribute("projectName", projectId))
+                .andExpect(MockMvcResultMatchers.view().name("memberList"));
     }
 
     @Test
-    void testMemberRegisterForm() throws Exception {
-        mockMvc.perform(get("/members/register"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("memberRegisterForm"));
+    @DisplayName("멤버 등록 페이지")
+    public void testMemberRegisterForm() throws Exception {
+        Long projectId = 1L;
+
+        mockMvc.perform(get("/members/register/{projectId}", projectId))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("projectId", projectId))
+                .andExpect(MockMvcResultMatchers.view().name("memberRegisterForm"));
     }
 
     @Test
-    void testCreateMember() throws Exception {
-        mockMvc.perform(post("/members/register"))
-                .andExpect(status().isCreated())
-                .andExpect(view().name("redirect:/projects/"));
+    @DisplayName("멤버 등록 ")
+    public void testRegisterMember() throws Exception {
+        Long projectId = 1L;
+        RegisterMember member = new RegisterMember("hello", 1L, "ADMIN");
+        // member 객체에 테스트용 데이터 설정
+
+        mockMvc.perform(post("/members/register")
+                        .param("projectId", String.valueOf(projectId))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .flashAttr("member", member))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/projects/" + projectId));
     }
 }
