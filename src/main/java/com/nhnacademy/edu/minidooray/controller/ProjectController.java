@@ -2,6 +2,7 @@ package com.nhnacademy.edu.minidooray.controller;
 
 import com.nhnacademy.edu.minidooray.domain.project.Project;
 import com.nhnacademy.edu.minidooray.service.ProjectService;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,11 @@ public class ProjectController {
     public String projectListForm(Model model, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
-
         String userId = (String) session.getAttribute("LOGIN_ID");
+
+        if (Objects.nonNull(session.getAttribute("projectId"))) {
+            session.removeAttribute("projectId");
+        }
 
         model.addAttribute("projects", projectService.getProjects(userId));
 
@@ -35,10 +39,12 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
-    public String projectViewForm(@PathVariable("projectId") Long projectId, Model model) {
+    public String projectViewForm(@PathVariable("projectId") Long projectId, Model model,
+                                  HttpServletRequest request) {
         Project project = projectService.getProject(projectId);
         model.addAttribute("project", project);
 
+        request.getSession(true).setAttribute("projectId", projectId);
 
         return "projectViewForm";
     }
