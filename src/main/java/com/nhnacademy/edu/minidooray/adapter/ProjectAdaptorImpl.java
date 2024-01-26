@@ -55,7 +55,7 @@ public class ProjectAdaptorImpl implements ProjectAdaptor {
                 taskProperties.getPort() + "/api/projects/{memberId}/list",
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<List<Project>>() {
+                new ParameterizedTypeReference<>() {
                 }, memberId);
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
@@ -75,7 +75,7 @@ public class ProjectAdaptorImpl implements ProjectAdaptor {
         ResponseEntity<Project> response = restTemplate.exchange(taskProperties.getPort() + "/api/projects/{projectId}",
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<Project>() {
+                new ParameterizedTypeReference<>() {
                 }, projectId);
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
