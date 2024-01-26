@@ -1,8 +1,9 @@
 package com.nhnacademy.edu.minidooray.adapter;
 
 import com.nhnacademy.edu.minidooray.domain.milestone.GetMilestone;
+import com.nhnacademy.edu.minidooray.domain.milestone.ModifyMilestone;
+import com.nhnacademy.edu.minidooray.domain.milestone.ModifyMilestoneRequest;
 import com.nhnacademy.edu.minidooray.domain.milestone.RegisterMilestone;
-import com.nhnacademy.edu.minidooray.domain.signup.SignupUser;
 import com.nhnacademy.edu.minidooray.property.TaskProperties;
 import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
@@ -64,5 +65,28 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
         }
 
         return response.getBody();
+    }
+
+    @Override
+    public void modifyMilestone(ModifyMilestone modifyMilestone) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<ModifyMilestoneRequest> entity = new HttpEntity<>(new ModifyMilestoneRequest(modifyMilestone.getMilestoneStatus()));
+        ResponseEntity<List<GetMilestone>> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + modifyMilestone.getMilestoneId(),
+                HttpMethod.PUT,
+                entity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT);
+        }
+    }
+
+    @Override
+    public void deleteMilestone(Long milestoneId) {
+
     }
 }

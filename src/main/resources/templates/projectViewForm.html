@@ -13,12 +13,12 @@
     <a th:href="@{/members/register/{projectId}(projectId=${project.projectId})}">
         <button class="btn btn-secondary btn-lg">멤버 등록</button>
     </a>
-    <a th:href="@{/milestones/{projectId}(projectId=${project.projectId})}">
+    <a th:href="@{/milestones/{projectId}/list(projectId=${project.projectId})}">
         <button class="btn btn-secondary btn-lg">마일스톤 조회</button>
     </a>
     <br>
     <br>
-    <form method="post" action="/milestones">
+    <form method="post" action="/milestones/register">
         <input name="projectId" type="hidden" th:value="${project.projectId}">
         <span>마일스톤 추가</span>
         <input name="milestoneStatus" type="text" placeholder="등록할 마일스톤">

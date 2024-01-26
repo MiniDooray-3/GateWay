@@ -1,5 +1,6 @@
 package com.nhnacademy.edu.minidooray.controller;
 
+import com.nhnacademy.edu.minidooray.domain.milestone.ModifyMilestone;
 import com.nhnacademy.edu.minidooray.domain.milestone.RegisterMilestone;
 import com.nhnacademy.edu.minidooray.exception.ValidationFailedException;
 import com.nhnacademy.edu.minidooray.service.MilestoneService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @RequestMapping("/milestones")
@@ -24,7 +25,7 @@ public class MilestoneController {
         this.milestoneService = milestoneService;
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public String doMilestoneRegister(@Validated @ModelAttribute RegisterMilestone registerMilestone,
                                             BindingResult bindingResult) {
 
@@ -37,15 +38,15 @@ public class MilestoneController {
         return "redirect:/projects/" + registerMilestone.getProjectId();
     }
 
-    @GetMapping("/{projectId}")
+    @GetMapping("/{projectId}/list")
     public String getMilestones(@PathVariable("projectId") Long projectId, Model model) {
         model.addAttribute("milestones", milestoneService.getMilestones(projectId));
 
         return "milestoneListForm";
     }
 
-    @GetMapping("/milestones/modify/{milestoneId}")
-    public String milestoneModify(@PathVariable("milestoneId") Long milestoneId,
+    @GetMapping("/{milestoneId}/modify")
+    public String modifyMilestone(@PathVariable("milestoneId") Long milestoneId,
                                   @RequestParam("milestoneStatus") String milestoneStatus,
                                   Model model) {
         model.addAttribute("milestoneId", milestoneId);
@@ -54,19 +55,20 @@ public class MilestoneController {
         return "milestoneModifyForm";
     }
 
-    @PostMapping("/milestones/modify/{milestoneId}")
-    public String doMilestoneModify(@PathVariable("milestoneId") Long milestoneId,
-                                  @RequestParam("milestoneStatus") String milestoneStatus,
-                                  Model model) {
-        model.addAttribute("milestoneId", milestoneId);
-        model.addAttribute("milestoneStatus", milestoneStatus);
+    @PostMapping("/milestones/{milestoneId}/modify")
+    public String doModifyMilestone(@Validated @ModelAttribute ModifyMilestone modifyMilestone,
+                                  @SessionAttribute("projectId") Long projectId) {
+        milestoneService.modifyMilestone(modifyMilestone);
 
-        return "milestoneModifyForm";
+        return "redirect:/milestones/" + projectId;
     }
 
-//    @GetMapping("/milestones/delete/{milestoneId}")
-//    public String doMilestoneDelete(@PathVariable("milestoneId") Long milestoneId) {
-//        milestoneService.deleteMilestone(milestoneId);
-//
-//    }
+    @GetMapping("/milestones/delete/{milestoneId}")
+    public String doMilestoneDelete(@PathVariable("milestoneId") Long milestoneId,
+                                    @SessionAttribute("projectId") Long projectId) {
+
+        milestoneService.deleteMilestone(milestoneId);
+
+        return "redirect:/milestones/" + projectId;
+    }
 }
