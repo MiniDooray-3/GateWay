@@ -7,13 +7,13 @@
 </head>
 <body>
     <h1 class="h3 mb-3 fw-normal" th:text="${project.projectName}"></h1>
-    <a th:href="@{/tasks/register/{projectId}(projectId=${project.projectId})}">
+    <a href="/tasks/register">
         <button class="btn btn-secondary btn-lg">업무 등록</button>
     </a>
-    <a th:href="@{/members/register/{projectId}(projectId=${project.projectId})}">
+    <a href="/members/register">
         <button class="btn btn-secondary btn-lg">멤버 등록</button>
     </a>
-    <a th:href="@{/milestones/{projectId}(projectId=${project.projectId})}">
+    <a href="/milestones">
         <button class="btn btn-secondary btn-lg">마일스톤 조회</button>
     </a>
     <br>
