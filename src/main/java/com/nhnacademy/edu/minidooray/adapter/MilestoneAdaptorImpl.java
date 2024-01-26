@@ -1,7 +1,8 @@
 package com.nhnacademy.edu.minidooray.adapter;
 
-import com.nhnacademy.edu.minidooray.domain.member.GetMember;
-import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
+import com.nhnacademy.edu.minidooray.domain.milestone.GetMilestone;
+import com.nhnacademy.edu.minidooray.domain.milestone.RegisterMilestone;
+import com.nhnacademy.edu.minidooray.domain.signup.SignupUser;
 import com.nhnacademy.edu.minidooray.property.TaskProperties;
 import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
@@ -12,60 +13,56 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class MemberAdaptorImpl implements MemberAdaptor {
+public class MilestoneAdaptorImpl implements MilestoneAdaptor {
 
     private final RestTemplate restTemplate;
 
-
     private final TaskProperties taskProperties;
 
-    public MemberAdaptorImpl(RestTemplate restTemplate, TaskProperties taskProperties) {
+    public MilestoneAdaptorImpl(RestTemplate restTemplate, TaskProperties taskProperties) {
         this.restTemplate = restTemplate;
         this.taskProperties = taskProperties;
     }
 
     @Override
-    public void createMember(RegisterMember member) {
+    public void createMilestone(RegisterMilestone registerMilestone) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<RegisterMember> requestEntity = new HttpEntity<>(member, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/api/members/register",
+        HttpEntity<RegisterMilestone> entity = new HttpEntity<>(registerMilestone, httpHeaders);
+        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones",
                 HttpMethod.POST,
-                requestEntity,
+                entity,
                 new ParameterizedTypeReference<>() {
                 });
 
-        if (!HttpStatus.CREATED.equals(exchange.getStatusCode())) {
+        if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
             throw new HttpClientErrorException(HttpStatus.CONFLICT);
         }
     }
 
     @Override
-    public List<GetMember> getMembers(Long projectId) {
+    public List<GetMilestone> getMilestones(Long projectId) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<List<GetMember>> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/api/members/{projectId}",
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<List<GetMilestone>> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + projectId,
                 HttpMethod.GET,
-                requestEntity,
+                entity,
                 new ParameterizedTypeReference<>() {
-                }, projectId);
+                });
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT);
         }
-        return exchange.getBody();
-    }
 
+        return response.getBody();
+    }
 }

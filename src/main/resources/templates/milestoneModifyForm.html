@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>마일스톤 수정</h1>
+<form method="post" th:action="@{/milestones/modify/{milestoneId}(milestoneId=${milestoneId})}">
+  <input name="milestoneId" type="hidden" th:value="${milestoneId}">
+  <input name="milestoneStatus" type="text" th:value="${milestoneStatus}">
+  <buttton class="btn btn-primary btn-lg">수정</buttton>
+</form>
+
+</body>
+</html>

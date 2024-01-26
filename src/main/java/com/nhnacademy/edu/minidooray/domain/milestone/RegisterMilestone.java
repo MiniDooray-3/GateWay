@@ -1,16 +1,15 @@
-package com.nhnacademy.edu.minidooray.domain.member;
+package com.nhnacademy.edu.minidooray.domain.milestone;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
-public class RegisterMember {
-
+@AllArgsConstructor
+public class RegisterMilestone {
     @NotBlank
-    private String memberId; // user_id
+    private String milestoneStatus;
+    @NotNull
     private Long projectId;
-    private String memberRole;
 }

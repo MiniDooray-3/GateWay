@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<h1>멤버 등록</h1>
 <div class="container">
   <form method="post" action="/members/register" class="mb-4">
     <div class="form-group">
@@ -16,7 +17,6 @@
     <input type="hidden" name="memberRole" th:value="MEMBER"/>
     <button type="submit" class="btn btn-primary">등록</button>
   </form>
-  <a href="/logout" class="btn btn-primary">로그아웃</a>
 </div>
 </body>
 </html>
