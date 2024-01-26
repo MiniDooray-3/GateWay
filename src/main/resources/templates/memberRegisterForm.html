@@ -5,15 +5,16 @@
   <title>멤버 등록하기</title>
 </head>
 <body>
+<h1>멤버 등록</h1>
 <form method="post" action="/members/register">
-  <span th:text="${userId}"/>: <input type="text" name="userId"/><br/>
+  <div class="form-floating" style="display: flex; width: 50%">
+    <span>멤버 ID : </span>
+    <input type="text" name="memberId" placeholder="회원 아이디">
+  </div>
   <input type="hidden" name="projectId" th:value="${projectId}"/>
   <input type="hidden" name="memberRole" th:value="MEMBER"/>
   <br/>
   <input type="submit" th:value="등록"/>
 </form>
-<br/>
-<button onclick="window.location.href='/logout'"><span th:text="로그아웃"/></button><br/>
-<br/>
 </body>
 </html>

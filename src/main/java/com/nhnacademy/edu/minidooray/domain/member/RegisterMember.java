@@ -12,5 +12,5 @@ public class RegisterMember {
     @NotBlank
     private String memberId; // user_id
     private Long projectId;
-    private String role;
+    private String memberRole;
 }
