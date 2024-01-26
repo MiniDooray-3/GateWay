@@ -9,4 +9,6 @@ public interface AccountAdaptor {
     boolean matches(LoginUser user);
 
     boolean createUser(SignupUser signupUser);
+
+    boolean isExistUser(String userId);
 }
