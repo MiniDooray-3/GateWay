@@ -2,7 +2,6 @@ package com.nhnacademy.edu.minidooray.adapter;
 
 import com.nhnacademy.edu.minidooray.domain.milestone.GetMilestone;
 import com.nhnacademy.edu.minidooray.domain.milestone.ModifyMilestone;
-import com.nhnacademy.edu.minidooray.domain.milestone.ModifyMilestoneRequest;
 import com.nhnacademy.edu.minidooray.domain.milestone.RegisterMilestone;
 import com.nhnacademy.edu.minidooray.property.TaskProperties;
 import java.util.List;
@@ -68,17 +67,17 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
     }
 
     @Override
-    public void modifyMilestone(ModifyMilestone modifyMilestone) {
+    public void modifyMilestone(Long milestoneId, ModifyMilestone modifyMilestone) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<ModifyMilestoneRequest> entity = new HttpEntity<>(new ModifyMilestoneRequest(modifyMilestone.getMilestoneStatus()));
-        ResponseEntity<List<GetMilestone>> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + modifyMilestone.getMilestoneId(),
+        HttpEntity<ModifyMilestone> entity = new HttpEntity<>(modifyMilestone, httpHeaders);
+        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/{milestoneId}" ,
                 HttpMethod.PUT,
                 entity,
                 new ParameterizedTypeReference<>() {
-                });
+                }, milestoneId);
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
             throw new HttpClientErrorException(HttpStatus.CONFLICT);
@@ -87,6 +86,19 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
 
     @Override
     public void deleteMilestone(Long milestoneId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
+        HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + milestoneId,
+                HttpMethod.DELETE,
+                entity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT);
+        }
     }
 }

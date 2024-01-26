@@ -9,7 +9,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ModifyMilestone {
     @NotBlank
-    private String milestoneStatus;
-    @NotNull
-    private Long milestoneId;
+    private String mileStoneStatus;
 }

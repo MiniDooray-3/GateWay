@@ -10,7 +10,7 @@ public interface MilestoneService {
 
     List<GetMilestone> getMilestones(Long projectId);
 
-    void modifyMilestone(ModifyMilestone modifyMilestone);
+    void modifyMilestone(Long milestoneId, ModifyMilestone modifyMilestone);
 
     void deleteMilestone(Long milestoneId);
 }

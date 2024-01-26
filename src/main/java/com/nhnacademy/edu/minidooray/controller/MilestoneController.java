@@ -38,8 +38,8 @@ public class MilestoneController {
         return "redirect:/projects/" + registerMilestone.getProjectId();
     }
 
-    @GetMapping("/{projectId}/list")
-    public String getMilestones(@PathVariable("projectId") Long projectId, Model model) {
+    @GetMapping("/list")
+    public String getMilestones(@SessionAttribute("projectId") Long projectId, Model model) {
         model.addAttribute("milestones", milestoneService.getMilestones(projectId));
 
         return "milestoneListForm";
@@ -55,20 +55,23 @@ public class MilestoneController {
         return "milestoneModifyForm";
     }
 
-    @PostMapping("/milestones/{milestoneId}/modify")
-    public String doModifyMilestone(@Validated @ModelAttribute ModifyMilestone modifyMilestone,
-                                  @SessionAttribute("projectId") Long projectId) {
-        milestoneService.modifyMilestone(modifyMilestone);
+    @PostMapping("/{milestoneId}/modify")
+    public String doModifyMilestone(@PathVariable Long milestoneId,
+                                    @Validated @ModelAttribute ModifyMilestone modifyMilestone,
+                                    BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+        milestoneService.modifyMilestone(milestoneId, modifyMilestone);
 
-        return "redirect:/milestones/" + projectId;
+        return "redirect:/milestones/list";
     }
 
-    @GetMapping("/milestones/delete/{milestoneId}")
-    public String doMilestoneDelete(@PathVariable("milestoneId") Long milestoneId,
-                                    @SessionAttribute("projectId") Long projectId) {
+    @GetMapping("/{milestoneId}/delete")
+    public String doMilestoneDelete(@PathVariable("milestoneId") Long milestoneId) {
 
         milestoneService.deleteMilestone(milestoneId);
 
-        return "redirect:/milestones/" + projectId;
+        return "redirect:/milestones/list";
     }
 }

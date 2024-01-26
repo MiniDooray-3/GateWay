@@ -26,8 +26,8 @@ public class MilestoneServiceImpl implements MilestoneService{
     }
 
     @Override
-    public void modifyMilestone(ModifyMilestone modifyMilestone) {
-        milestoneAdaptor.modifyMilestone(modifyMilestone);
+    public void modifyMilestone(Long milestoneId, ModifyMilestone modifyMilestone) {
+        milestoneAdaptor.modifyMilestone(milestoneId, modifyMilestone);
     }
 
     @Override
