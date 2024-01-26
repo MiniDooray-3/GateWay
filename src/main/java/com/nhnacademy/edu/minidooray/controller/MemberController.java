@@ -17,13 +17,15 @@ public class MemberController {
     private final MemberService memberService;
 
 
+
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
 
     @GetMapping("/members/list")
-    public String getMembers(@SessionAttribute("project_id") Long projectId, Model model) {
+    public String getMembers(@SessionAttribute("projectId") Long projectId,
+                             Model model) {
 
         List<GetMember> members = memberService.getMembers(projectId);
         model.addAttribute("members", members);
@@ -32,15 +34,14 @@ public class MemberController {
     }
 
     @GetMapping("/members/register")
-    public String memberRegisterForm(@SessionAttribute(value = "projectId") Long projectId,
-                                     Model model) {
+    public String memberRegisterForm(@SessionAttribute("projectId") Long projectId, Model model) {
         model.addAttribute("projectId", projectId);
         return "memberRegisterForm";
     }
 
     @PostMapping("/members/register")
     public String registerMember(@SessionAttribute("projectId") Long projectId,
-                                 @ModelAttribute RegisterMember member) {
+                               @ModelAttribute RegisterMember member) {
         memberService.createMember(member);
 
         return "redirect:/projects/" + projectId;

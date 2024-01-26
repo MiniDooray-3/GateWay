@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title>태그 등록하기</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <form method="post" action="/tags/register" class="mb-4">
+        <div class="form-group">
+            <label for="tagName">등록할 태그:</label>
+            <input type="text" id="tagName" name="tagName" class="form-control"/>
+        </div>
+        <input type="hidden" name="projectId" th:value="${projectId}"/>
+        <button type="submit" class="btn btn-primary">등록</button>
+    </form>
+</div>
+</body>
+</html>
