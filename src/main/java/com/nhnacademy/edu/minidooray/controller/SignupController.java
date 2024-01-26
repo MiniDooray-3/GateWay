@@ -28,7 +28,6 @@ public class SignupController {
     }
 
     @PostMapping("/signup")
-    @ResponseStatus(HttpStatus.CREATED)
     public String doSignup(@Validated @ModelAttribute SignupUser signupUser,
                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
