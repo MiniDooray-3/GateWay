@@ -1,8 +1,8 @@
 package com.nhnacademy.edu.minidooray.adapter;
 
 import com.nhnacademy.edu.minidooray.domain.milestone.GetMilestone;
+import com.nhnacademy.edu.minidooray.domain.milestone.ModifyMilestone;
 import com.nhnacademy.edu.minidooray.domain.milestone.RegisterMilestone;
-import com.nhnacademy.edu.minidooray.domain.signup.SignupUser;
 import com.nhnacademy.edu.minidooray.property.TaskProperties;
 import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
@@ -64,5 +64,41 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
         }
 
         return response.getBody();
+    }
+
+    @Override
+    public void modifyMilestone(Long milestoneId, ModifyMilestone modifyMilestone) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<ModifyMilestone> entity = new HttpEntity<>(modifyMilestone, httpHeaders);
+        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/{milestoneId}" ,
+                HttpMethod.PUT,
+                entity,
+                new ParameterizedTypeReference<>() {
+                }, milestoneId);
+
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT);
+        }
+    }
+
+    @Override
+    public void deleteMilestone(Long milestoneId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + milestoneId,
+                HttpMethod.DELETE,
+                entity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT);
+        }
     }
 }

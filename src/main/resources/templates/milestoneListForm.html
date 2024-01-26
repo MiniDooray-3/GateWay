@@ -19,8 +19,8 @@
             <tr th:each="milestone : ${milestones}">
                 <th scope="row" th:text="${milestone.mileStoneId}"></th>
                 <td th:text="${milestone.mileStoneStatus}"></td>
-                <td><a th:href="@{/milestones/modify/{milestoneId}(milestoneId=${milestone.mileStoneId}, milestoneStatus=${milestone.mileStoneStatus})}" th:text="수정"></a></td>
-                <td><a th:href="@{/milestones/delete/{milestoneId}(milestoneId=${milestone.mileStoneId})}" th:text="삭제"></a></td>
+                <td><a th:href="@{/milestones/{milestoneId}/modify(milestoneId=${milestone.mileStoneId}, milestoneStatus=${milestone.mileStoneStatus})}" th:text="수정"></a></td>
+                <td><a th:href="@{/milestones/{milestoneId}/delete(milestoneId=${milestone.mileStoneId})}" th:text="삭제"></a></td>
             </tr>
         </tbody>
     </table>
