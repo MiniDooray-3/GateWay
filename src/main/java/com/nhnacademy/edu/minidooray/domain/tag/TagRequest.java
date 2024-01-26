@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class RegisterTag {
+public class TagRequest {
     private String tageName;
-    private Long projectId;
 }

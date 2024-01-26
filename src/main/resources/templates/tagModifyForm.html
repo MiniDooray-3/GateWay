@@ -3,32 +3,9 @@
 <head>
     <meta charset="UTF-8"/>
     <title>태그 수정</title>
-    <style>
-        body {
-            padding: 20px;
-        }
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 5px;
-            margin-bottom: 10px;
-        }
-        input[type="submit"] {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
-<form method="post" th:action="@{/tags/{tagId}/modify(tagId=${tagId})}">
+<form method="post" th:action="@{/tags/{id}(id=${tagId})}">
     태그 이름: <input type="text" name="tagName" th:value="${tagName}"/><br/>
     <br/>
     <input type="submit" th:value="등록"/>

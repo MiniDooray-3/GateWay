@@ -1,7 +1,6 @@
 package com.nhnacademy.edu.minidooray.adapter;
 
-import com.nhnacademy.edu.minidooray.domain.tag.GetTag;
-import com.nhnacademy.edu.minidooray.domain.tag.ModifyTag;
+import com.nhnacademy.edu.minidooray.domain.tag.TagRequest;
 import com.nhnacademy.edu.minidooray.domain.tag.RegisterTag;
 import com.nhnacademy.edu.minidooray.property.TaskProperties;
 import java.util.List;
@@ -34,9 +33,10 @@ public class TagAdaptorImpl implements TagAdaptor {
     public void registerTag(RegisterTag tag) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<RegisterTag> requestEntity = new HttpEntity<>(tag, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<RegisterTag> exchange = restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags",
                 HttpMethod.POST,
                 requestEntity,
@@ -49,12 +49,13 @@ public class TagAdaptorImpl implements TagAdaptor {
     }
 
     @Override
-    public void modifyTag(Long tagId, ModifyTag tag) {
+    public void modifyTag(Long tagId, TagRequest tag) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<ModifyTag> requestEntity = new HttpEntity<>(tag, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<TagRequest> exchange = restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags/{tag_id}",
                 HttpMethod.PUT,
                 requestEntity,
@@ -70,6 +71,7 @@ public class TagAdaptorImpl implements TagAdaptor {
     public void deleteTag(Long tagId) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
         ResponseEntity<Void> exchange = restTemplate.exchange(
@@ -85,13 +87,13 @@ public class TagAdaptorImpl implements TagAdaptor {
     }
 
     @Override
-    public List<GetTag> getTags(Long projectId) {
+    public List<TagRequest> getTags(Long projectId) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<List<GetTag>> exchange = restTemplate.exchange(
+        ResponseEntity<List<TagRequest>> exchange = restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags/{project_id}",
                 HttpMethod.GET,
                 requestEntity,
@@ -105,13 +107,13 @@ public class TagAdaptorImpl implements TagAdaptor {
     }
 
     @Override
-    public GetTag getTag(Long tagId) {
+    public TagRequest getTag(Long tagId) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<GetTag> exchange = restTemplate.exchange(
+        ResponseEntity<TagRequest> exchange = restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags/{tag_id}",
                 HttpMethod.GET,
                 requestEntity,

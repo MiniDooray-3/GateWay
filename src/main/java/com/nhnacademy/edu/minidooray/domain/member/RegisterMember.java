@@ -11,10 +11,6 @@ public class RegisterMember {
 
     @NotBlank
     private String memberId; // user_id
-
-    @NotNull
     private Long projectId;
-
-    @NotBlank
     private String memberRole;
 }
