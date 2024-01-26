@@ -7,4 +7,6 @@ public interface AccountService {
     boolean matches(String userId, String userPassword);
 
     void signUp(SignupUser signupUser);
+
+    void deleteUser(String userId);
 }

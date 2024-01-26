@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Project - View</title>
@@ -13,5 +13,6 @@
 <a th:href="@{/members/register/{projectId}(projectId=${project.projectId})}">
     <button class="btn btn-secondary btn-lg">멤버 등록</button>
 </a>
+<p th:text="${project.projectId}"></p>
 </body>
 </html>

@@ -37,13 +37,13 @@ public class MemberAdaptorImpl implements MemberAdaptor {
 
         HttpEntity<RegisterMember> requestEntity = new HttpEntity<>(member, httpHeaders);
         ResponseEntity<Void> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/members/register",
+                taskProperties.getPort() + "/api/members/register",
                 HttpMethod.POST,
                 requestEntity,
-                new ParameterizedTypeReference<Void>() {
+                new ParameterizedTypeReference<>() {
                 });
 
-        if (HttpStatus.CREATED.equals(exchange.getStatusCode())) {
+        if (!HttpStatus.CREATED.equals(exchange.getStatusCode())) {
             throw new RuntimeException();
         }
     }
@@ -56,13 +56,13 @@ public class MemberAdaptorImpl implements MemberAdaptor {
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
         ResponseEntity<List<GetMember>> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/members/" + projectId,
+                taskProperties.getPort() + "/api/members/{projectId}",
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
-                });
+                }, projectId);
 
-        if (HttpStatus.OK.equals(exchange.getStatusCode())) {
+        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
             throw new RuntimeException();
         }
         return exchange.getBody();
