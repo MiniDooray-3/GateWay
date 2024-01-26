@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
+  <meta charset="UTF-8"/>
   <title>멤버 리스트</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
-  <div class="title"> < <span th:text="${projectName}"/> > 프로젝트 멤버 리스트</div>
-  <table>
+  <h1 class="mt-4">프로젝트 멤버 리스트</h1>
+  <table class="table">
+    <thead class="thead-light">
     <tr>
       <th>멤버 아이디</th>
       <th>멤버 역할</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="member : ${members}">
       <td th:text="${member.memberId}"></td>
       <td th:text="${member.role}"></td>
     </tr>
+    </tbody>
   </table>
 </div>
 </body>

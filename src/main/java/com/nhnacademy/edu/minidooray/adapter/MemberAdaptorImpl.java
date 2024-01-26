@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -29,7 +30,6 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     }
 
     @Override
-    @ResponseStatus(HttpStatus.CREATED)
     public void createMember(RegisterMember member) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -37,14 +37,14 @@ public class MemberAdaptorImpl implements MemberAdaptor {
 
         HttpEntity<RegisterMember> requestEntity = new HttpEntity<>(member, httpHeaders);
         ResponseEntity<Void> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/members/register",
+                taskProperties.getPort() + "/api/members/register",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<Void>() {
                 });
 
-        if (HttpStatus.CREATED.equals(exchange.getStatusCode())) {
-            throw new RuntimeException();
+        if (!HttpStatus.CREATED.equals(exchange.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT);
         }
     }
 
@@ -56,14 +56,14 @@ public class MemberAdaptorImpl implements MemberAdaptor {
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
         ResponseEntity<List<GetMember>> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/members/" + projectId,
+                taskProperties.getPort() + "/api/members/{projectId}",
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
-                });
+                }, projectId);
 
-        if (HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new RuntimeException();
+        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
         return exchange.getBody();
     }

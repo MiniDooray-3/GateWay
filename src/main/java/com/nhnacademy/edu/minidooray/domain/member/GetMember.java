@@ -10,5 +10,5 @@ import lombok.Setter;
 public class GetMember {
     private String role;
     private String memberId; // user_id
+    
 }
-
