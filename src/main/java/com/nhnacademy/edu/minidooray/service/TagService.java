@@ -1,18 +1,19 @@
 package com.nhnacademy.edu.minidooray.service;
 
+import com.nhnacademy.edu.minidooray.domain.tag.ModifyTag;
 import com.nhnacademy.edu.minidooray.domain.tag.RegisterTag;
-import com.nhnacademy.edu.minidooray.domain.tag.TagRequest;
+import com.nhnacademy.edu.minidooray.domain.tag.GetTag;
 import java.util.List;
 
 public interface TagService {
 
     void registerTag(RegisterTag tag);
 
-    void modifyTag(Long tagId, TagRequest tag);
+    void modifyTag(Long tagId, ModifyTag tag);
 
     void deleteTag(Long tagId);
 
-    List<TagRequest> getTags(Long projectId);
+    List<GetTag> getTags(Long projectId);
 
-    TagRequest getTag(Long tagId);
+    GetTag getTag(Long tagId);
 }

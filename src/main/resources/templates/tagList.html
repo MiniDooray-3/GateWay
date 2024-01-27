@@ -12,17 +12,18 @@
         <thead class="thead-light">
         <tr>
             <th>태그 이름</th>
+            <th>수정</th>
+            <th>삭제</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="tag : ${tags}">
             <td th:text="${tag.tagName}"></td>
             <td>
-                <input type="hidden" name="tagName" th:value="${tag.tageName}"/>
-                <a th:href="@{/tags/{tagId}/modify(tagId=${tagId})}" class="btn btn-primary">수정</a>
+                <a th:href="@{/tags/{tagId}/modify(tagId=${tag.tagId}, tagName=${tag.tagName})}" class="btn btn-primary">수정</a>
             </td>
             <td>
-                <a th:href="@{/tags/{tagId}/delete(tagId=${tagId})}" class="btn btn-danger">삭제</a>
+                <a th:href="@{/tags/{tagId}/delete(tagId=${tag.tagId})}" class="btn btn-danger">삭제</a>
             </td>
         </tr>
         </tbody>

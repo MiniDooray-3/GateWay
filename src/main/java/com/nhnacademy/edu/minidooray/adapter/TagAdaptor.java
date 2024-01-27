@@ -1,6 +1,7 @@
 package com.nhnacademy.edu.minidooray.adapter;
 
-import com.nhnacademy.edu.minidooray.domain.tag.TagRequest;
+import com.nhnacademy.edu.minidooray.domain.tag.GetTag;
+import com.nhnacademy.edu.minidooray.domain.tag.ModifyTag;
 import com.nhnacademy.edu.minidooray.domain.tag.RegisterTag;
 import java.util.List;
 
@@ -8,11 +9,11 @@ public interface TagAdaptor {
 
     void registerTag(RegisterTag tag);
 
-    void modifyTag(Long tagId, TagRequest tag);
+    void modifyTag(Long tagId, ModifyTag tag);
 
     void deleteTag(Long tagId);
 
-    List<TagRequest> getTags(Long projectId);
+    List<GetTag> getTags(Long projectId);
 
-    TagRequest getTag(Long tagId);
+    GetTag getTag(Long tagId);
 }

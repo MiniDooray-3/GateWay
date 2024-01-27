@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GetMember {
-    private String role;
+    private String memberRole;
     private String memberId; // user_id
     
 }
