@@ -2,6 +2,7 @@ package com.nhnacademy.edu.minidooray.service;
 
 import com.nhnacademy.edu.minidooray.adapter.ProjectAdaptor;
 import com.nhnacademy.edu.minidooray.domain.project.Project;
+import com.nhnacademy.edu.minidooray.domain.project.ProjectModify;
 import com.nhnacademy.edu.minidooray.domain.project.ProjectRegister;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project getProject(Long projectId) {
         return projectAdaptor.getProject(projectId);
+    }
+
+    @Override
+    public void modifyStatus(Long projectId, String status) {
+        projectAdaptor.modifyProject(new ProjectModify(projectId, status));
     }
 }

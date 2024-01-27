@@ -6,12 +6,11 @@ import com.nhnacademy.edu.minidooray.domain.comment.CommentModifyRequest;
 import com.nhnacademy.edu.minidooray.domain.comment.CommentRegister;
 import com.nhnacademy.edu.minidooray.domain.comment.CommentRegisterRequest;
 import com.nhnacademy.edu.minidooray.domain.comment.GetComments;
-import com.nhnacademy.edu.minidooray.domain.task.TaskOnlyId;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
     private final CommentAdaptor commentAdaptor;
 

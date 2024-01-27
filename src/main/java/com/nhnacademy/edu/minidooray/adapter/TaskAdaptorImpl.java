@@ -53,15 +53,12 @@ public class TaskAdaptorImpl implements TaskAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Long> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/tasks/{taskId}",
+        restTemplate.exchange(taskProperties.getPort() + "/api/tasks/{taskId}",
                 HttpMethod.DELETE,
                 entity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 }, taskId);
 
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-        }
     }
 
     @Override
@@ -77,10 +74,6 @@ public class TaskAdaptorImpl implements TaskAdaptor {
                 entity,
                 new ParameterizedTypeReference<>() {
                 }, taskId);
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
-        }
 
         return response.getBody();
     }
@@ -99,10 +92,6 @@ public class TaskAdaptorImpl implements TaskAdaptor {
                 new ParameterizedTypeReference<>() {
                 }, projectId);
 
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
-        }
-
         return response.getBody();
     }
 
@@ -112,15 +101,12 @@ public class TaskAdaptorImpl implements TaskAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<TaskModifyRequest> entity = new HttpEntity<>(taskModifyRequest, httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/tasks/{task_id}",
+        restTemplate.exchange(taskProperties.getPort() + "/api/tasks/{task_id}",
                 HttpMethod.PUT,
                 entity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 }, taskId);
 
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
-        }
     }
 
 }
