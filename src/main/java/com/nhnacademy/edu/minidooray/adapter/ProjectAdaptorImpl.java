@@ -31,7 +31,7 @@ public class ProjectAdaptorImpl implements ProjectAdaptor {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<ProjectRegister> entity = new HttpEntity<>(httpHeaders);
+        HttpEntity<ProjectRegister> entity = new HttpEntity<>(projectRegister, httpHeaders);
         ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/projects",
                 HttpMethod.POST,
                 entity,

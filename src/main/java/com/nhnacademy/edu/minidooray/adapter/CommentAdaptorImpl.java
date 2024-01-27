@@ -1,9 +1,10 @@
 package com.nhnacademy.edu.minidooray.adapter;
 
-import com.nhnacademy.edu.minidooray.domain.task.Task;
-import com.nhnacademy.edu.minidooray.domain.task.TaskModifyRequest;
-import com.nhnacademy.edu.minidooray.domain.task.TaskRegister;
-import com.nhnacademy.edu.minidooray.domain.task.TaskViewRequest;
+import com.nhnacademy.edu.minidooray.domain.comment.CommentIdAndContent;
+import com.nhnacademy.edu.minidooray.domain.comment.CommentModifyRequest;
+import com.nhnacademy.edu.minidooray.domain.comment.CommentRegister;
+import com.nhnacademy.edu.minidooray.domain.comment.GetComments;
+import com.nhnacademy.edu.minidooray.domain.task.TaskOnlyId;
 import com.nhnacademy.edu.minidooray.property.TaskProperties;
 import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
@@ -18,109 +19,114 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class TaskAdaptorImpl implements TaskAdaptor {
+public class CommentAdaptorImpl implements CommentAdaptor{
 
-    private final RestTemplate restTemplate;
-
+    private final RestTemplate restTemplatet;
     private final TaskProperties taskProperties;
 
-
-    public TaskAdaptorImpl(RestTemplate restTemplate, TaskProperties taskProperties) {
-        this.restTemplate = restTemplate;
+    public CommentAdaptorImpl(RestTemplate restTemplatet, TaskProperties taskProperties) {
+        this.restTemplatet = restTemplatet;
         this.taskProperties = taskProperties;
     }
 
+
     @Override
-    public void createTask(TaskRegister taskRegister) {
+    public void createComment(CommentRegister commentRegister) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<TaskRegister> entity = new HttpEntity<>(taskRegister, httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/tasks",
+        HttpEntity<CommentRegister> entity = new HttpEntity<>(commentRegister, httpHeaders);
+        ResponseEntity<Void> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comments",
                 HttpMethod.POST,
                 entity,
                 new ParameterizedTypeReference<>() {
                 });
 
         if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
+            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
         }
     }
 
     @Override
-    public void deleteTask(Long taskId) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Long> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/tasks/{taskId}",
-                HttpMethod.DELETE,
-                entity,
-                new ParameterizedTypeReference<>() {
-                }, taskId);
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public Task getTask(Long taskId) {
+    public List<GetComments> getComments(Long taskId) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<Long> entity = new HttpEntity<>(httpHeaders);
-
-        ResponseEntity<Task> response = restTemplate.exchange(taskProperties.getPort() + "/api/tasks/{taskId}",
+        ResponseEntity<List<GetComments>> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{task_id}",
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<>() {
                 }, taskId);
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
 
         return response.getBody();
     }
 
     @Override
-    public List<TaskViewRequest> getTasks(Long projectId) {
+    public CommentIdAndContent getComment(Long commentId) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<Long> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<List<TaskViewRequest>> response = restTemplate.exchange(
-                taskProperties.getPort() + "/api/projects/tasks/{projectId}",
+        ResponseEntity<CommentIdAndContent> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comment/{comment_id}",
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<>() {
-                }, projectId);
+                }, commentId);
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
 
         return response.getBody();
     }
 
     @Override
-    public void modifyTask(Long taskId, TaskModifyRequest taskModifyRequest) {
+    public TaskOnlyId modifyComment(Long commentId, CommentModifyRequest commentModifyRequest) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<TaskModifyRequest> entity = new HttpEntity<>(taskModifyRequest, httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/tasks/{task_id}",
+        HttpEntity<CommentModifyRequest> entity = new HttpEntity<>(commentModifyRequest, httpHeaders);
+        ResponseEntity<TaskOnlyId> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{comment_id}",
                 HttpMethod.PUT,
                 entity,
                 new ParameterizedTypeReference<>() {
-                }, taskId);
+                }, commentId);
+
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
+        }
+
+        return response.getBody();
+    }
+
+    @Override
+    public TaskOnlyId deleteComment(Long commentId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<Long> entity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<TaskOnlyId> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{comment_id}",
+                HttpMethod.DELETE,
+                entity,
+                new ParameterizedTypeReference<>() {
+                }, commentId);
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
             throw new HttpClientErrorException(HttpStatus.CONFLICT);
         }
+
+        return response.getBody();
     }
+
 
 }

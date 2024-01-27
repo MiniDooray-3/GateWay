@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Task - Register</title>
+    <title>Task - Modify</title>
 
     <style>
         #container {
@@ -19,15 +19,15 @@
     </style>
 </head>
 <body>
-<form method="post" action="/tasks/register">
+<form method="post" th:action="@{/tasks/{task_id}/modify(task_id=${task.taskId})}">
     <div id="container">
         <div id="left-panel">
             <span>제목 : </span>
-            <input type="text" name="taskTitle"/>
+            <input type="text" name="taskTitle" th:value="${task.taskTitle}" readonly/>
             <br/>
             <br/>
             <span>내용 : </span>
-            <textarea name="taskContent"></textarea>
+            <textarea th:name="taskContent" th:text="${task.taskContent}"></textarea>
             <br/>
 
         </div>

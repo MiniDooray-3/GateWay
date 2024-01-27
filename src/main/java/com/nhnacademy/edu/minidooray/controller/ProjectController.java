@@ -2,6 +2,7 @@ package com.nhnacademy.edu.minidooray.controller;
 
 import com.nhnacademy.edu.minidooray.domain.project.Project;
 import com.nhnacademy.edu.minidooray.service.ProjectService;
+import com.nhnacademy.edu.minidooray.service.TaskService;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final TaskService taskService;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, TaskService taskService) {
         this.projectService = projectService;
+        this.taskService = taskService;
     }
 
     @GetMapping("/list")
@@ -43,6 +46,7 @@ public class ProjectController {
                                   HttpServletRequest request) {
         Project project = projectService.getProject(projectId);
         model.addAttribute("project", project);
+        model.addAttribute("tasks", taskService.getTasks(projectId));
 
         request.getSession(true).setAttribute("projectId", projectId);
 

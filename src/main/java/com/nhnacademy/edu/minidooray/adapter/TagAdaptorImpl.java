@@ -123,4 +123,25 @@ public class TagAdaptorImpl implements TagAdaptor {
         }
         return exchange.getBody();
     }
+
+    @Override
+    public List<GetTag> getTagByTaskId(Long taskId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<List<GetTag>> exchange = restTemplate.exchange(
+                taskProperties.getPort() + "/api/task/tag/{task_id}",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                }, taskId);
+
+        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        }
+        return exchange.getBody();
+    }
+
 }

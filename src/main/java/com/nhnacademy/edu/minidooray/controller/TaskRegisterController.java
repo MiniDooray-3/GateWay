@@ -2,6 +2,7 @@ package com.nhnacademy.edu.minidooray.controller;
 
 import com.nhnacademy.edu.minidooray.domain.task.TaskRegisterRequest;
 import com.nhnacademy.edu.minidooray.service.MilestoneService;
+import com.nhnacademy.edu.minidooray.service.TagService;
 import com.nhnacademy.edu.minidooray.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,17 +18,20 @@ public class TaskRegisterController {
 
     private final TaskService taskService;
     private final MilestoneService milestoneService;
+    private final TagService tagService;
 
 
-    public TaskRegisterController(TaskService taskService, MilestoneService milestoneService) {
+    public TaskRegisterController(TaskService taskService, MilestoneService milestoneService, TagService tagService) {
         this.taskService = taskService;
         this.milestoneService = milestoneService;
+        this.tagService = tagService;
     }
 
     @GetMapping
     public String taskRegisterForm(@SessionAttribute("projectId") Long projectId,
                                    Model model) {
         model.addAttribute("mileStones", milestoneService.getMilestones(projectId));
+        model.addAttribute("tags", tagService.getTags(projectId));
 
         return "taskRegisterForm";
     }
