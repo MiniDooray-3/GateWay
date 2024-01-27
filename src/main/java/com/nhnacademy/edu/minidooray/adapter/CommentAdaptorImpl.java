@@ -11,15 +11,13 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class CommentAdaptorImpl implements CommentAdaptor{
+public class CommentAdaptorImpl implements CommentAdaptor {
 
     private final RestTemplate restTemplatet;
     private final TaskProperties taskProperties;
@@ -37,15 +35,12 @@ public class CommentAdaptorImpl implements CommentAdaptor{
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<CommentRegister> entity = new HttpEntity<>(commentRegister, httpHeaders);
-        ResponseEntity<Void> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comments",
+        restTemplatet.exchange(taskProperties.getPort() + "/api/comments",
                 HttpMethod.POST,
                 entity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 });
 
-        if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
-        }
     }
 
     @Override
@@ -55,15 +50,12 @@ public class CommentAdaptorImpl implements CommentAdaptor{
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<Long> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<List<GetComments>> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{task_id}",
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<>() {
-                }, taskId);
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
+        ResponseEntity<List<GetComments>> response =
+                restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{task_id}",
+                        HttpMethod.GET,
+                        entity,
+                        new ParameterizedTypeReference<>() {
+                        }, taskId);
 
         return response.getBody();
     }
@@ -75,15 +67,12 @@ public class CommentAdaptorImpl implements CommentAdaptor{
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<Long> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<CommentIdAndContent> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comment/{comment_id}",
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<>() {
-                }, commentId);
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
+        ResponseEntity<CommentIdAndContent> response =
+                restTemplatet.exchange(taskProperties.getPort() + "/api/comment/{comment_id}",
+                        HttpMethod.GET,
+                        entity,
+                        new ParameterizedTypeReference<>() {
+                        }, commentId);
 
         return response.getBody();
     }
@@ -95,15 +84,12 @@ public class CommentAdaptorImpl implements CommentAdaptor{
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<CommentModifyRequest> entity = new HttpEntity<>(commentModifyRequest, httpHeaders);
-        ResponseEntity<TaskOnlyId> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{comment_id}",
-                HttpMethod.PUT,
-                entity,
-                new ParameterizedTypeReference<>() {
-                }, commentId);
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
-        }
+        ResponseEntity<TaskOnlyId> response =
+                restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{comment_id}",
+                        HttpMethod.PUT,
+                        entity,
+                        new ParameterizedTypeReference<>() {
+                        }, commentId);
 
         return response.getBody();
     }
@@ -115,15 +101,12 @@ public class CommentAdaptorImpl implements CommentAdaptor{
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<Long> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<TaskOnlyId> response = restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{comment_id}",
-                HttpMethod.DELETE,
-                entity,
-                new ParameterizedTypeReference<>() {
-                }, commentId);
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
-        }
+        ResponseEntity<TaskOnlyId> response =
+                restTemplatet.exchange(taskProperties.getPort() + "/api/comments/{comment_id}",
+                        HttpMethod.DELETE,
+                        entity,
+                        new ParameterizedTypeReference<>() {
+                        }, commentId);
 
         return response.getBody();
     }

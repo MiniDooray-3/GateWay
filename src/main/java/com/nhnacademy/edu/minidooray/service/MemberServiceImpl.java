@@ -6,7 +6,6 @@ import com.nhnacademy.edu.minidooray.domain.UserRequest;
 import com.nhnacademy.edu.minidooray.domain.member.GetMember;
 import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
 import com.nhnacademy.edu.minidooray.exception.UserAlreadyExistException;
-import com.nhnacademy.edu.minidooray.exception.UserNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
