@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -36,16 +35,13 @@ public class TagAdaptorImpl implements TagAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<RegisterTag> requestEntity = new HttpEntity<>(tag, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+        restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 });
 
-        if (!HttpStatus.CREATED.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
     }
 
     @Override
@@ -54,16 +50,13 @@ public class TagAdaptorImpl implements TagAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<ModifyTag> requestEntity = new HttpEntity<>(tag, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+        restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags/{tag_id}",
                 HttpMethod.PUT,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }, tagId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
     }
 
     @Override
@@ -72,16 +65,13 @@ public class TagAdaptorImpl implements TagAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+        restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags/{tag_id}",
                 HttpMethod.DELETE,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }, tagId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
     }
 
     @Override
@@ -98,9 +88,6 @@ public class TagAdaptorImpl implements TagAdaptor {
                 new ParameterizedTypeReference<>() {
                 }, projectId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
         return exchange.getBody();
     }
 
@@ -118,9 +105,6 @@ public class TagAdaptorImpl implements TagAdaptor {
                 new ParameterizedTypeReference<>() {
                 }, tagId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
         return exchange.getBody();
     }
 }

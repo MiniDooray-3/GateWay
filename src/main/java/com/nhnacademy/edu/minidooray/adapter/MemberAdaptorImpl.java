@@ -8,11 +8,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -35,16 +33,12 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<RegisterMember> requestEntity = new HttpEntity<>(member, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+        restTemplate.exchange(
                 taskProperties.getPort() + "/api/members/register",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 });
-
-        if (!HttpStatus.CREATED.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
-        }
     }
 
     @Override
@@ -61,9 +55,6 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new ParameterizedTypeReference<>() {
                 }, projectId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
         return exchange.getBody();
     }
 
@@ -81,9 +72,6 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new ParameterizedTypeReference<>() {
                 }, userId, projectId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
         return exchange.getBody();
     }
 

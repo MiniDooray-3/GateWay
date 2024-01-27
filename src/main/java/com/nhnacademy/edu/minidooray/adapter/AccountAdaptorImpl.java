@@ -5,7 +5,6 @@ import com.nhnacademy.edu.minidooray.domain.login.LoginUser;
 import com.nhnacademy.edu.minidooray.domain.signup.SignupUser;
 import com.nhnacademy.edu.minidooray.property.AccountProperties;
 import java.util.List;
-import java.util.Objects;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

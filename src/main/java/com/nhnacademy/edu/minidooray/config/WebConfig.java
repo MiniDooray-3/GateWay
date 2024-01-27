@@ -1,8 +1,6 @@
 package com.nhnacademy.edu.minidooray.config;
 
 import com.nhnacademy.edu.minidooray.interceptor.LoginInterceptor;
-import com.nhnacademy.edu.minidooray.interceptor.ProjectMemberCheckInterceptor;
-import com.nhnacademy.edu.minidooray.interceptor.ProjectMemberCheckInterceptorBefore;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -25,13 +23,13 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/", "/login", "/signup");
 
-        registry.addInterceptor(new ProjectMemberCheckInterceptor(applicationContext))
-                .excludePathPatterns("/projects/list", "/projects/{projectId}",
-                        "/logout", "/withdraw");
-
-        registry.addInterceptor(new ProjectMemberCheckInterceptorBefore(applicationContext))
-                .addPathPatterns("/projects/{projectId}")
-                .excludePathPatterns("/projects/list");
+//        registry.addInterceptor(new ProjectMemberCheckInterceptor(applicationContext))
+//                .excludePathPatterns("/projects/list", "/projects/{projectId}",
+//                        "/logout", "/withdraw");
+//
+//        registry.addInterceptor(new ProjectMemberCheckInterceptorBefore(applicationContext))
+//                .addPathPatterns("/projects/{projectId}")
+//                .excludePathPatterns("/projects/list");
     }
 
     @Bean
