@@ -60,4 +60,24 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         return exchange.getBody();
     }
 
+    @Override
+    public GetMember getMember(String userId, Long projectId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<GetMember> exchange = restTemplate.exchange(
+                taskProperties.getPort() + "/api/members/{member_id}/{project_id}",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                }, userId, projectId);
+
+        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        }
+        return exchange.getBody();
+    }
+
 }

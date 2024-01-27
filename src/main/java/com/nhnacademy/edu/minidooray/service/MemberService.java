@@ -10,4 +10,5 @@ public interface MemberService {
 
     List<GetMember> getMembers(Long projectId);
 
+    GetMember getMember(String userId, Long projectId);
 }
