@@ -35,7 +35,7 @@ public class MilestoneController {
 
         milestoneService.createMilestone(registerMilestone);
 
-        return "redirect:/projects/" + registerMilestone.getProjectId();
+        return "redirect:/milestones/list";
     }
 
     @GetMapping("/list")
