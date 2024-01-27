@@ -30,7 +30,6 @@ public class ProjectAdaptorImpl implements ProjectAdaptor {
     public void createProject(ProjectRegister projectRegister) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<ProjectRegister> entity = new HttpEntity<>(projectRegister, httpHeaders);
         ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/projects",

@@ -1,8 +1,9 @@
 package com.nhnacademy.edu.minidooray.service;
 
 import com.nhnacademy.edu.minidooray.adapter.TagAdaptor;
+import com.nhnacademy.edu.minidooray.domain.tag.ModifyTag;
 import com.nhnacademy.edu.minidooray.domain.tag.RegisterTag;
-import com.nhnacademy.edu.minidooray.domain.tag.TagRequest;
+import com.nhnacademy.edu.minidooray.domain.tag.GetTag;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void modifyTag(Long tagId, TagRequest tag) {
+    public void modifyTag(Long tagId, ModifyTag tag) {
         tagAdaptor.modifyTag(tagId, tag);
     }
 
@@ -31,12 +32,17 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<TagRequest> getTags(Long projectId) {
+    public List<GetTag> getTags(Long projectId) {
         return tagAdaptor.getTags(projectId);
     }
 
     @Override
-    public TagRequest getTag(Long tagId) {
+    public GetTag getTag(Long tagId) {
         return tagAdaptor.getTag(tagId);
+    }
+
+    @Override
+    public List<GetTag> getTagsByTaskId(Long taskId) {
+        return tagAdaptor.getTagByTaskId(taskId);
     }
 }
