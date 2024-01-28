@@ -3,11 +3,14 @@ package com.nhnacademy.edu.minidooray.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,6 +21,7 @@ import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
 import com.nhnacademy.edu.minidooray.service.MemberService;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +30,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.ModelAndView;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -85,7 +90,7 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("멤버 등록 페이지 - 성공")
-    void testMemberRegisterForm() throws Exception {
+    void testMemberRegisterForm_Success() throws Exception {
         Long projectId = 1L;
 
         mockMvc.perform(get("/members/register")
@@ -99,7 +104,7 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("멤버 등록 - 성공")
-    void testRegisterMember() throws Exception {
+    void testRegisterMember_ValidMember_Success() throws Exception {
         Long projectId = 1L;
         RegisterMember member = new RegisterMember("soulDel", 1L, "ADMIN");
 
@@ -112,7 +117,66 @@ class MemberControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/projects/" + projectId));
 
-        verify(memberService).createMember(any());
+        verify(memberService).createMember(member);
     }
 
+    @Test
+    @DisplayName("멤버 등록 - 실패 : memberId not blank 유효성 부적합")
+    void testRegisterMember_MemberId_ValidationFailure_Failure() throws Exception {
+        Long projectId = 1L;
+        RegisterMember member = new RegisterMember("soulDel", 1L, "ADMIN");
+        String memberId = "";
+
+        mockMvc.perform(post("/members/register")
+                        .param("memberId", memberId)
+                        .param("projectId", member.getProjectId().toString())
+                        .param("memberRole", member.getMemberRole())
+                        .sessionAttr("projectId", projectId)
+                        .sessionAttr("LOGIN_ID","pringles12"))
+                .andExpect(status().isBadRequest())
+                .andExpect(handler().handlerType(MemberController.class))
+                .andExpect(handler().methodName("registerMember"));
+
+        verify(memberService, never()).createMember(member);
+    }
+
+    @Test
+    @DisplayName("멤버 등록 - 실패 : memberRole not blank 유효성 부적합")
+    void testRegisterMember_MemberRole_ValidationFailure_Failure() throws Exception {
+        Long projectId = 1L;
+        RegisterMember member = new RegisterMember("soulDel", 1L, "ADMIN");
+        String memberRole = "";
+
+        mockMvc.perform(post("/members/register")
+                        .param("memberId", member.getMemberId())
+                        .param("projectId", member.getProjectId().toString())
+                        .param("memberRole", memberRole)
+                        .sessionAttr("projectId", projectId)
+                        .sessionAttr("LOGIN_ID","pringles12"))
+                .andExpect(status().isBadRequest())
+                .andExpect(handler().handlerType(MemberController.class))
+                .andExpect(handler().methodName("registerMember"));
+
+        verify(memberService, never()).createMember(member);
+    }
+
+    @Test
+    @DisplayName("멤버 등록 - 실패 : projectId not null 유효성 부적합")
+    void testRegisterMember_ProjectId_ValidationFailure_Failure() throws Exception {
+        Long projectId = 1L;
+        RegisterMember member = new RegisterMember("soulDel", 1L, "ADMIN");
+        Long projectIdInMember = null;
+
+        mockMvc.perform(post("/members/register")
+                        .param("memberId", member.getMemberId())
+                        .param("projectId", String.valueOf(projectIdInMember))
+                        .param("memberRole", member.getMemberRole())
+                        .sessionAttr("projectId", projectId)
+                        .sessionAttr("LOGIN_ID","pringles12"))
+                .andExpect(status().isBadRequest())
+                .andExpect(handler().handlerType(MemberController.class))
+                .andExpect(handler().methodName("registerMember"));
+
+        verify(memberService, never()).createMember(member);
+    }
 }
