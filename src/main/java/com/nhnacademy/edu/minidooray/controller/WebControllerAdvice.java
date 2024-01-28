@@ -12,11 +12,13 @@ import org.springframework.web.client.HttpServerErrorException;
 @ControllerAdvice
 public class WebControllerAdvice {
     @ExceptionHandler(HttpClientErrorException.class)
+
     public String handleClientException() {
         return "redirect:/access-denied";
     }
 
     @ExceptionHandler(HttpServerErrorException.class)
+
     public String handleServerException() {
         return "redirect:/";
     }
@@ -29,3 +31,4 @@ public class WebControllerAdvice {
         return "error";
     }
 }
+

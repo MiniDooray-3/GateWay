@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -23,6 +22,8 @@ public class TagAdaptorImpl implements TagAdaptor {
     private final RestTemplate restTemplate;
 
     private final TaskProperties taskProperties;
+
+    private static final String TAG_RUD_URL = "/api/tags/{tag_id}";
 
     public TagAdaptorImpl(RestTemplate restTemplate, TaskProperties taskProperties) {
         this.restTemplate = restTemplate;
@@ -52,11 +53,12 @@ public class TagAdaptorImpl implements TagAdaptor {
 
         HttpEntity<ModifyTag> requestEntity = new HttpEntity<>(tag, httpHeaders);
         restTemplate.exchange(
-                taskProperties.getPort() + "/api/tags/{tag_id}",
+                taskProperties.getPort() + TAG_RUD_URL,
                 HttpMethod.PUT,
                 requestEntity,
                 new ParameterizedTypeReference<Void>() {
                 }, tagId);
+
     }
 
     @Override
@@ -65,16 +67,13 @@ public class TagAdaptorImpl implements TagAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/api/tags/{tag_id}",
+        restTemplate.exchange(
+                taskProperties.getPort() + TAG_RUD_URL,
                 HttpMethod.DELETE,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 }, tagId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
     }
 
     @Override
@@ -88,7 +87,7 @@ public class TagAdaptorImpl implements TagAdaptor {
                 taskProperties.getPort() + "/api/tags/{project_id}",
                 HttpMethod.GET,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<List<GetTag>>() {
                 }, projectId);
 
         return exchange.getBody();
@@ -102,7 +101,7 @@ public class TagAdaptorImpl implements TagAdaptor {
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
         ResponseEntity<GetTag> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/api/tags/{tag_id}",
+                taskProperties.getPort() + TAG_RUD_URL,
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<>() {

@@ -63,8 +63,7 @@ public class TagController {
     @PostMapping("/{tag_id}/modify")
     public String modifyTag(@PathVariable("tag_id") Long tagId,
                             @Valid  @ModelAttribute ModifyTag tag,
-                            BindingResult bindingResult,
-                            Model model) {
+                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
