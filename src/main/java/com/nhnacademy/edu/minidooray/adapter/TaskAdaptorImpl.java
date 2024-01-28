@@ -58,7 +58,6 @@ public class TaskAdaptorImpl implements TaskAdaptor {
                 entity,
                 new ParameterizedTypeReference<Void>() {
                 }, taskId);
-
     }
 
     @Override

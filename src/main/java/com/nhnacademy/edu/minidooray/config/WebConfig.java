@@ -22,18 +22,21 @@ public class WebConfig implements WebMvcConfigurer {
         this.applicationContext = applicationContext;
     }
 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/**")
                 .excludePathPatterns("/", "/login", "/signup", "/access-denied");
 
         registry.addInterceptor(new ProjectMemberCheckInterceptor(applicationContext))
-                .excludePathPatterns("/projects/list",
-                        "/projects/{projectId}", "/logout", "/withdraw", "/", "/login", "/signup", "/access-denied");
+                .excludePathPatterns("/", "/login", "/signup", "/projects/list", "/projects/{projectId}",
+                        "/logout", "/withdraw", "/projects/register", "/access-denied");
 
         registry.addInterceptor(new ProjectMemberCheckInterceptorBefore(applicationContext))
-                .excludePathPatterns("/projects/list")
-                .addPathPatterns("/projects/{projectId}");
+                .addPathPatterns("/projects/{projectId}")
+                .excludePathPatterns("/projects/list", "/projects/modify", "/projects/register");
+
     }
 
     @Bean
