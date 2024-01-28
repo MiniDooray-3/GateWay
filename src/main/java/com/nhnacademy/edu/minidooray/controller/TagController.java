@@ -24,6 +24,8 @@ public class TagController {
 
     private final TagService tagService;
 
+    private final static String REDIRECT_URL = "redirect:/tags/list";
+
     public TagController(TagService tagService) {
         this.tagService = tagService;
     }
@@ -46,7 +48,7 @@ public class TagController {
         }
         tagService.registerTag(tag);
 
-        return "redirect:/tags/list";
+        return REDIRECT_URL;
     }
 
     @GetMapping("/{tag_id}/modify")
@@ -63,20 +65,19 @@ public class TagController {
     @PostMapping("/{tag_id}/modify")
     public String modifyTag(@PathVariable("tag_id") Long tagId,
                             @Valid  @ModelAttribute ModifyTag tag,
-                            BindingResult bindingResult,
-                            Model model) {
+                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
         tagService.modifyTag(tagId, tag);
 
-        return "redirect:/tags/list";
+        return REDIRECT_URL;
     }
 
     @GetMapping("/{tag_id}/delete")
     public String deleteTag(@PathVariable("tag_id") Long tagId) {
         tagService.deleteTag(tagId);
 
-        return "redirect:/tags/list";
+        return REDIRECT_URL;
     }
 }

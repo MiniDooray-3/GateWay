@@ -1,12 +1,11 @@
 package com.nhnacademy.edu.minidooray.interceptor;
 
 import com.nhnacademy.edu.minidooray.service.MemberService;
-import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 public class ProjectMemberCheckInterceptorBefore implements HandlerInterceptor {
 
@@ -17,16 +16,16 @@ public class ProjectMemberCheckInterceptorBefore implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         MemberService memberService = applicationContext.getBean(MemberService.class);
-        String userId = request.getSession().getAttribute("LOGIN_ID").toString();
-        Long projectId = Long.parseLong(request.getSession().getAttribute("projectId").toString());
+        HttpSession session = request.getSession(false);
 
-        boolean isMember = Objects.nonNull(memberService.getMember(userId, projectId));
+        String userId = String.valueOf(session.getAttribute("LOGIN_ID"));
 
-        if (!isMember) {
-            response.sendRedirect("/access-denied");
-        }
+        String[] temps = request.getRequestURI().split("/");
+        Long projectId = Long.parseLong(temps[temps.length - 1]);
+        memberService.getMember(userId, projectId);
+
+        return true;
     }
 }
