@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -33,14 +34,19 @@ public class AccountAdaptorImpl implements AccountAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        HttpEntity<LoginUser> entity = new HttpEntity<>(user, httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/login",
-                HttpMethod.POST,
-                entity,
-                new ParameterizedTypeReference<>() {
-                });
+        try {
+            HttpEntity<LoginUser> entity = new HttpEntity<>(user, httpHeaders);
+            restTemplate.exchange(accountProperties.getPort() + "/api/accounts/login",
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<Void>() {
+                    });
 
-        return HttpStatus.OK.equals(response.getStatusCode());
+            return true;
+        } catch (HttpClientErrorException.Unauthorized e) {
+        }
+
+        return false;
     }
 
     @Override
@@ -50,11 +56,15 @@ public class AccountAdaptorImpl implements AccountAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<SignupUser> entity = new HttpEntity<>(signupUser, httpHeaders);
-        restTemplate.exchange(accountProperties.getPort() + "/api/accounts/signup",
+        ResponseEntity<Void> exchange = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/signup",
                 HttpMethod.POST,
                 entity,
                 new ParameterizedTypeReference<>() {
                 });
+
+//        if (HttpStatus.OK != exchange.getStatusCode()) {
+//            throw new RuntimeException("유저 생성 실패");
+//        }
     }
 
     @Override

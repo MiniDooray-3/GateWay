@@ -24,7 +24,7 @@ public class ProjectMemberCheckInterceptor implements HandlerInterceptor {
             throws IOException {
 
         MemberService memberService = applicationContext.getBean(MemberService.class);
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession(false);
 
         String userId = String.valueOf(session.getAttribute("LOGIN_ID"));
 
