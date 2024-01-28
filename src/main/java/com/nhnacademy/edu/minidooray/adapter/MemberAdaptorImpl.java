@@ -8,12 +8,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -36,16 +33,14 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<RegisterMember> requestEntity = new HttpEntity<>(member, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+
+        restTemplate.exchange(
                 taskProperties.getPort() + "/api/members/register",
                 HttpMethod.POST,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 });
 
-        if (!HttpStatus.CREATED.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
-        }
     }
 
     @Override
@@ -61,6 +56,23 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }, projectId);
+
+        return exchange.getBody();
+    }
+
+    @Override
+    public GetMember getMember(String userId, Long projectId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<GetMember> exchange = restTemplate.exchange(
+                taskProperties.getPort() + "/api/members/{member_id}/{project_id}",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                }, userId, projectId);
 
         if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);

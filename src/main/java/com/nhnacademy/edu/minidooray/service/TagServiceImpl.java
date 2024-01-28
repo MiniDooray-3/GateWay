@@ -40,4 +40,9 @@ public class TagServiceImpl implements TagService {
     public GetTag getTag(Long tagId) {
         return tagAdaptor.getTag(tagId);
     }
+
+    @Override
+    public List<GetTag> getTagsByTaskId(Long taskId) {
+        return tagAdaptor.getTagByTaskId(taskId);
+    }
 }

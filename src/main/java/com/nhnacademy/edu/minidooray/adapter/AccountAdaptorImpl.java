@@ -5,7 +5,6 @@ import com.nhnacademy.edu.minidooray.domain.login.LoginUser;
 import com.nhnacademy.edu.minidooray.domain.signup.SignupUser;
 import com.nhnacademy.edu.minidooray.property.AccountProperties;
 import java.util.List;
-import java.util.Objects;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -45,35 +44,31 @@ public class AccountAdaptorImpl implements AccountAdaptor {
     }
 
     @Override
-    public boolean createUser(SignupUser signupUser) {
+    public void createUser(SignupUser signupUser) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<SignupUser> entity = new HttpEntity<>(signupUser, httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/signup",
+        restTemplate.exchange(accountProperties.getPort() + "/api/accounts/signup",
                 HttpMethod.POST,
                 entity,
                 new ParameterizedTypeReference<>() {
                 });
-
-        return HttpStatus.CREATED.equals(response.getStatusCode());
     }
 
     @Override
-    public boolean deleteUser(String userId) {
+    public void deleteUser(String userId) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/{userId}",
+        restTemplate.exchange(accountProperties.getPort() + "/api/accounts/{userId}",
                 HttpMethod.DELETE,
                 entity,
                 new ParameterizedTypeReference<>() {
                 }, userId);
-
-        return HttpStatus.OK.equals(response.getStatusCode());
     }
 
     @Override
@@ -83,11 +78,12 @@ public class AccountAdaptorImpl implements AccountAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<UserRequest> response = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/{userId}",
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<>() {
-                }, userId);
+        ResponseEntity<UserRequest> response =
+                restTemplate.exchange(accountProperties.getPort() + "/api/accounts/{userId}",
+                        HttpMethod.GET,
+                        entity,
+                        new ParameterizedTypeReference<>() {
+                        }, userId);
 
         return response.getBody();
     }

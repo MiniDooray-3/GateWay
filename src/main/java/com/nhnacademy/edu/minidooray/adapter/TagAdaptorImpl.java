@@ -36,16 +36,13 @@ public class TagAdaptorImpl implements TagAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<RegisterTag> requestEntity = new HttpEntity<>(tag, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+        restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags",
                 HttpMethod.POST,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 });
 
-        if (!HttpStatus.CREATED.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
     }
 
     @Override
@@ -54,16 +51,12 @@ public class TagAdaptorImpl implements TagAdaptor {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<ModifyTag> requestEntity = new HttpEntity<>(tag, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(
+        restTemplate.exchange(
                 taskProperties.getPort() + "/api/tags/{tag_id}",
                 HttpMethod.PUT,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 }, tagId);
-
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
     }
 
     @Override
@@ -98,9 +91,6 @@ public class TagAdaptorImpl implements TagAdaptor {
                 new ParameterizedTypeReference<>() {
                 }, projectId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
         return exchange.getBody();
     }
 
@@ -118,9 +108,24 @@ public class TagAdaptorImpl implements TagAdaptor {
                 new ParameterizedTypeReference<>() {
                 }, tagId);
 
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
         return exchange.getBody();
     }
+
+    @Override
+    public List<GetTag> getTagByTaskId(Long taskId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<List<GetTag>> exchange = restTemplate.exchange(
+                taskProperties.getPort() + "/api/task/tag/{task_id}",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                }, taskId);
+
+        return exchange.getBody();
+    }
+
 }

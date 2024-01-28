@@ -16,4 +16,6 @@ public interface TagAdaptor {
     List<GetTag> getTags(Long projectId);
 
     GetTag getTag(Long tagId);
+
+    List<GetTag> getTagByTaskId(Long taskId);
 }

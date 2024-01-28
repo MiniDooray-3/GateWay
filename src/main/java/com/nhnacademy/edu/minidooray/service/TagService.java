@@ -16,4 +16,6 @@ public interface TagService {
     List<GetTag> getTags(Long projectId);
 
     GetTag getTag(Long tagId);
+
+    List<GetTag> getTagsByTaskId(Long taskId);
 }

@@ -10,4 +10,5 @@ public interface MemberAdaptor {
 
     List<GetMember> getMembers(Long projectId);
 
+    GetMember getMember(String userId, Long projectId);
 }
