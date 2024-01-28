@@ -3,7 +3,6 @@ package com.nhnacademy.edu.minidooray.controller;
 import com.nhnacademy.edu.minidooray.domain.comment.CommentModifyRequest;
 import com.nhnacademy.edu.minidooray.domain.comment.CommentRegisterRequest;
 import com.nhnacademy.edu.minidooray.service.CommentService;
-import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,17 +16,19 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    private static final String REDIRECT_URL = "redirect:/tasks/";
+
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
 
     @PostMapping("/comments")
     public String registerComment(@SessionAttribute("LOGIN_ID") String memberId,
-                                @SessionAttribute("projectId") Long projectId,
-                                @ModelAttribute CommentRegisterRequest commentRegisterRequest) {
+                                  @SessionAttribute("projectId") Long projectId,
+                                  @ModelAttribute CommentRegisterRequest commentRegisterRequest) {
         commentService.registerComment(memberId, commentRegisterRequest, projectId);
 
-        return "redirect:/tasks/" + commentRegisterRequest.getTaskId();
+        return REDIRECT_URL + commentRegisterRequest.getTaskId();
     }
 
     @GetMapping("/comments/{comment_id}/modify")
@@ -43,13 +44,13 @@ public class CommentController {
                                 @ModelAttribute CommentModifyRequest commentModifyRequest) {
         Long taskId = commentService.modifyComment(commentId, commentModifyRequest);
 
-        return "redirect:/tasks/" + taskId;
+        return REDIRECT_URL + taskId;
     }
 
     @GetMapping("/comments/{comment_id}/delete")
     public String deleteComment(@PathVariable("comment_id") Long commentId) {
         Long taskId = commentService.deleteComment(commentId);
 
-        return "redirect:/tasks/" + taskId;
+        return REDIRECT_URL + taskId;
     }
 }

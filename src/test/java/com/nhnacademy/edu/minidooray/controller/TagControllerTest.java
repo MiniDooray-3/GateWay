@@ -83,7 +83,7 @@ class TagControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tags/list"));
 
-        verify(tagService).registerTag(tag);
+        verify(tagService).registerTag(any(RegisterTag.class));
     }
 
     @Test
@@ -155,7 +155,7 @@ class TagControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tags/list"));
 
-        verify(tagService).modifyTag(tagId, tag);
+        verify(tagService).modifyTag(any(Long.class), any(ModifyTag.class));
     }
 
     @Test
