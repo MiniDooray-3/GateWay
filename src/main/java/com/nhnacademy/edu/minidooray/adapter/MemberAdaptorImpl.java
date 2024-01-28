@@ -37,7 +37,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 taskProperties.getPort() + "/api/members/register",
                 HttpMethod.POST,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 });
     }
 

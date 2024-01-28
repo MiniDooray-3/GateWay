@@ -23,6 +23,8 @@ public class TagAdaptorImpl implements TagAdaptor {
 
     private final TaskProperties taskProperties;
 
+    private static final String TAG_RUD_URL = "/api/tags/{tag_id}";
+
     public TagAdaptorImpl(RestTemplate restTemplate, TaskProperties taskProperties) {
         this.restTemplate = restTemplate;
         this.taskProperties = taskProperties;
@@ -39,7 +41,7 @@ public class TagAdaptorImpl implements TagAdaptor {
                 taskProperties.getPort() + "/api/tags",
                 HttpMethod.POST,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 });
 
     }
@@ -51,10 +53,10 @@ public class TagAdaptorImpl implements TagAdaptor {
 
         HttpEntity<ModifyTag> requestEntity = new HttpEntity<>(tag, httpHeaders);
         restTemplate.exchange(
-                taskProperties.getPort() + "/api/tags/{tag_id}",
+                taskProperties.getPort() + TAG_RUD_URL,
                 HttpMethod.PUT,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 }, tagId);
 
     }
@@ -66,10 +68,10 @@ public class TagAdaptorImpl implements TagAdaptor {
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
         restTemplate.exchange(
-                taskProperties.getPort() + "/api/tags/{tag_id}",
+                taskProperties.getPort() + TAG_RUD_URL,
                 HttpMethod.DELETE,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 }, tagId);
 
     }
@@ -85,7 +87,7 @@ public class TagAdaptorImpl implements TagAdaptor {
                 taskProperties.getPort() + "/api/tags/{project_id}",
                 HttpMethod.GET,
                 requestEntity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<List<GetTag>>() {
                 }, projectId);
 
         return exchange.getBody();
@@ -99,7 +101,7 @@ public class TagAdaptorImpl implements TagAdaptor {
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
         ResponseEntity<GetTag> exchange = restTemplate.exchange(
-                taskProperties.getPort() + "/api/tags/{tag_id}",
+                taskProperties.getPort() + TAG_RUD_URL,
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<>() {

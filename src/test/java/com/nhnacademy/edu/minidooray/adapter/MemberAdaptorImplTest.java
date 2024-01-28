@@ -1,11 +1,7 @@
 package com.nhnacademy.edu.minidooray.adapter;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +36,7 @@ class MemberAdaptorImplTest {
 
 
     @Test
-    void createMember_ValidMember_Success() {
+    void testCreateMember_ValidMember_Success() {
         RegisterMember member = new RegisterMember("dingo12", 1L, "MEMBER");
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -50,56 +46,62 @@ class MemberAdaptorImplTest {
         HttpEntity<RegisterMember> requestEntity = new HttpEntity<>(member, httpHeaders);
         ResponseEntity<Void> responseEntity = new ResponseEntity<>(HttpStatus.CREATED);
 
-        doNothing().when(restTemplate.exchange(
-                any(String.class),
-                eq(HttpMethod.POST),
-                eq(requestEntity),
-                eq(ParameterizedTypeReference.class)
-        ));
+        when(restTemplate.exchange(
+                taskProperties.getPort() + "/api/members/register",
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<Void>() {}
+        )).thenReturn(responseEntity);
 
         memberAdaptor.createMember(member);
 
         verify(restTemplate).exchange(
-                any(String.class),
-                eq(HttpMethod.POST),
-                eq(requestEntity),
-                eq(ParameterizedTypeReference.class)
+                taskProperties.getPort() + "/api/members/register",
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<Void>() {}
         );
     }
 
     @Test
-    void getMembers_ValidProjectId_Success() {
+    void testGetMembers_ValidProjectId_Success() {
         Long projectId = 1L;
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
+        List<GetMember> expectedMembers = List.of(
+                new GetMember("ADMIN", "gang1"),
+                new GetMember("MEMBER", "nan1"),
+                new GetMember("MEMBER", "kong1")
+        );
+
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<List<GetMember>> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+        ResponseEntity<List<GetMember>> responseEntity = new ResponseEntity<>(expectedMembers, HttpStatus.OK);
 
         when(restTemplate.exchange(
-                any(String.class),
-                eq(HttpMethod.GET),
-                eq(requestEntity),
-                eq(new ParameterizedTypeReference<List<GetMember>>() {}),
-                eq(projectId)
+                taskProperties.getPort() + "/api/members/{projectId}",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<List<GetMember>>() {},
+                projectId
         )).thenReturn(responseEntity);
 
-        List<GetMember> members = memberAdaptor.getMembers(projectId);
+        List<GetMember> actualMembers = memberAdaptor.getMembers(projectId);
 
         verify(restTemplate).exchange(
-                any(String.class),
-                eq(HttpMethod.GET),
-                eq(requestEntity),
-                eq(new ParameterizedTypeReference<List<GetMember>>() {}),
-                eq(projectId)
+                taskProperties.getPort() + "/api/members/{projectId}",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<List<GetMember>>() {},
+                projectId
         );
-        assertThat(responseEntity.getBody()).isEqualTo(members);
+        assertThat(responseEntity.getBody()).isEqualTo(actualMembers);
     }
 
     @Test
-    void getMember_ValidUserIdAndProjectId_Success() {
+    void testGetMember_ValidUserIdAndProjectId_Success() {
         String userId = "lombok17";
         Long projectId = 1L;
 
@@ -107,28 +109,30 @@ class MemberAdaptorImplTest {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
+        GetMember expectedMember = new GetMember("ADMIN", "gang1");
+
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<GetMember> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+        ResponseEntity<GetMember> responseEntity = new ResponseEntity<>(expectedMember, HttpStatus.OK);
 
         when(restTemplate.exchange(
-                any(String.class),
-                eq(HttpMethod.GET),
-                eq(requestEntity),
-                eq(new ParameterizedTypeReference<GetMember>() {}),
-                eq(userId),
-                eq(projectId)
+                taskProperties.getPort() + "/api/members/{member_id}/{project_id}",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<GetMember>() {},
+                userId,
+                projectId
         )).thenReturn(responseEntity);
 
-        GetMember member = memberAdaptor.getMember(userId, projectId);
+        GetMember actualMember = memberAdaptor.getMember(userId, projectId);
 
         verify(restTemplate).exchange(
-                any(String.class),
-                eq(HttpMethod.GET),
-                eq(requestEntity),
-                eq(new ParameterizedTypeReference<GetMember>() {}),
-                eq(userId),
-                eq(projectId)
+                taskProperties.getPort() + "/api/members/{member_id}/{project_id}",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<GetMember>() {},
+                userId,
+                projectId
         );
-        assertThat(responseEntity.getBody()).isEqualTo(member);
+        assertThat(responseEntity.getBody()).isEqualTo(actualMember);
     }
 }

@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.edu.minidooray.domain.member.GetMember;
 import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
 import com.nhnacademy.edu.minidooray.service.MemberService;
@@ -37,17 +36,17 @@ class MemberControllerTest {
     @DisplayName("멤버 전부 조회 - 성공")
     void testGetMembers() throws Exception {
         Long projectId = 1L;
-        List<GetMember> members = List.of(
+        List<GetMember> expectedMembers = List.of(
                 new GetMember("MEMBER", "lux"),
                 new GetMember("ADMIN", "blang"));
 
-        when(memberService.getMembers(projectId)).thenReturn(members);
+        when(memberService.getMembers(projectId)).thenReturn(expectedMembers);
 
         mockMvc.perform(get("/members/list")
                         .sessionAttr("projectId", projectId))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("members"))
-                .andExpect(model().attribute("members", members))
+                .andExpect(model().attribute("members", expectedMembers))
                 .andExpect(view().name("memberList"));
 
         verify(memberService, times(1)).getMembers(projectId);

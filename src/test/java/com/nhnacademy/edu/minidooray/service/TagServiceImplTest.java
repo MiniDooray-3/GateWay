@@ -1,7 +1,6 @@
 package com.nhnacademy.edu.minidooray.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -15,7 +14,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -70,15 +68,15 @@ class TagServiceImplTest {
     @DisplayName("태그 전부 조회 - 성공")
     void testGetTags() {
         Long projectId = 1L;
-        List<GetTag> tags = List.of(
+        List<GetTag> expectedTags = List.of(
                 new GetTag("tag1", 1L),
                 new GetTag("tag2", 2L));
 
-        when(tagAdaptor.getTags(projectId)).thenReturn(tags);
+        when(tagAdaptor.getTags(projectId)).thenReturn(expectedTags);
 
-        List<GetTag> result = tagService.getTags(projectId);
+        List<GetTag> actualTags = tagService.getTags(projectId);
 
-        assertThat(result).isEqualTo(tags);
+        assertThat(actualTags).isEqualTo(expectedTags);
         verify(tagAdaptor, times(1)).getTags(projectId);
     }
 
@@ -86,13 +84,13 @@ class TagServiceImplTest {
     @DisplayName("태그 1개 조회 - 성공")
     void testGetTag() {
         Long tagId = 1L;
-        GetTag tag = new GetTag("tag1", tagId);
+        GetTag expectedTag = new GetTag("tag1", tagId);
 
-        when(tagAdaptor.getTag(tagId)).thenReturn(tag);
+        when(tagAdaptor.getTag(tagId)).thenReturn(expectedTag);
 
-        GetTag result = tagService.getTag(tagId);
+        GetTag actualTag = tagService.getTag(tagId);
 
-        assertThat(result).isEqualTo(tag);
+        assertThat(actualTag).isEqualTo(expectedTag);
         verify(tagAdaptor, times(1)).getTag(tagId);
     }
 }

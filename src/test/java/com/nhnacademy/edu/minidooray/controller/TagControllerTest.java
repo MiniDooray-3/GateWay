@@ -38,15 +38,15 @@ class TagControllerTest {
     @DisplayName("태그 전부 조회 - 성공")
     void testGetTags() throws Exception {
         Long projectId = 1L;
-        List<GetTag> tags = List.of(
+        List<GetTag> expectedTags = List.of(
                 new GetTag("tag1", 1L),
                 new GetTag("tag2", 2L));
 
-        given(tagService.getTags(projectId)).willReturn(tags);
+        given(tagService.getTags(projectId)).willReturn(expectedTags);
 
         mockMvc.perform(get("/tags/list").sessionAttr("projectId", projectId))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("tags", tags))
+                .andExpect(model().attribute("tags", expectedTags))
                 .andExpect(view().name("tagList"));
     }
 
