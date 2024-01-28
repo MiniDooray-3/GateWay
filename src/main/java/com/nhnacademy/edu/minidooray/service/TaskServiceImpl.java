@@ -8,10 +8,9 @@ import com.nhnacademy.edu.minidooray.domain.task.TaskRegisterRequest;
 import com.nhnacademy.edu.minidooray.domain.task.TaskViewRequest;
 import java.util.List;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Service
-public class TaskServiceImpl implements TaskService{
+public class TaskServiceImpl implements TaskService {
 
     private final TaskAdaptor taskAdaptor;
 

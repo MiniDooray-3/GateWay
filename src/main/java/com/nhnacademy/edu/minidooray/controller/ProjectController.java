@@ -24,6 +24,8 @@ public class ProjectController {
     private final ProjectService projectService;
     private final TaskService taskService;
 
+    private static final String PROJECT_ID = "projectId";
+
     public ProjectController(ProjectService projectService, TaskService taskService) {
         this.projectService = projectService;
         this.taskService = taskService;
@@ -35,8 +37,8 @@ public class ProjectController {
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("LOGIN_ID");
 
-        if (Objects.nonNull(session.getAttribute("projectId"))) {
-            session.removeAttribute("projectId");
+        if (Objects.nonNull(session.getAttribute(PROJECT_ID))) {
+            session.removeAttribute(PROJECT_ID);
         }
 
         model.addAttribute("projects", projectService.getProjects(userId));
@@ -51,7 +53,7 @@ public class ProjectController {
         model.addAttribute("project", project);
         model.addAttribute("tasks", taskService.getTasks(projectId));
 
-        request.getSession(true).setAttribute("projectId", projectId);
+        request.getSession(true).setAttribute(PROJECT_ID, projectId);
 
         return "projectViewForm";
     }

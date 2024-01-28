@@ -47,11 +47,12 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<List<GetMilestone>> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + projectId,
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<>() {
-                });
+        ResponseEntity<List<GetMilestone>> response =
+                restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + projectId,
+                        HttpMethod.GET,
+                        entity,
+                        new ParameterizedTypeReference<>() {
+                        });
 
         return response.getBody();
     }

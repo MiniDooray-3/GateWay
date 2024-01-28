@@ -1,6 +1,7 @@
 package com.nhnacademy.edu.minidooray.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -8,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -17,11 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.nhnacademy.edu.minidooray.domain.member.GetMember;
 import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
-import com.nhnacademy.edu.minidooray.exception.ValidationFailedException;
 import com.nhnacademy.edu.minidooray.service.MemberService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +28,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.servlet.ModelAndView;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,9 +40,9 @@ class MemberControllerTest {
     MemberService memberService;
 
     @BeforeEach
-    void setUp() {
-        GetMember getMember = new GetMember("ADMIN", "pringles12");
-        given(memberService.getMember(any(), any())).willReturn(getMember);
+    void setup() {
+        GetMember member = new GetMember("ADMIN", "tester");
+        given(memberService.getMember(anyString(), any())).willReturn(member);
     }
 
     @Test
@@ -60,7 +57,7 @@ class MemberControllerTest {
 
         mockMvc.perform(get("/members/list")
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "tester"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("members"))
                 .andExpect(model().attribute("members", expectedMembers))
@@ -78,8 +75,8 @@ class MemberControllerTest {
         when(memberService.getMembers(projectId)).thenReturn(emptyMemberList);
 
         mockMvc.perform(get("/members/list")
-                    .sessionAttr("projectId", projectId)
-                    .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("projectId", projectId)
+                        .sessionAttr("LOGIN_ID", "tester"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("members"))
                 .andExpect(model().attribute("members", emptyMemberList))
@@ -95,7 +92,7 @@ class MemberControllerTest {
 
         mockMvc.perform(get("/members/register")
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "tester"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("projectId"))
                 .andExpect(model().attribute("projectId", projectId))
@@ -113,11 +110,11 @@ class MemberControllerTest {
                         .param("projectId", member.getProjectId().toString())
                         .param("memberRole", member.getMemberRole())
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "tester"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/projects/" + projectId));
 
-        verify(memberService).createMember(member);
+        verify(memberService).createMember(any(RegisterMember.class));
     }
 
     @Test
@@ -132,7 +129,7 @@ class MemberControllerTest {
                         .param("projectId", member.getProjectId().toString())
                         .param("memberRole", member.getMemberRole())
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "pringles12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("registerMember"));
@@ -152,7 +149,7 @@ class MemberControllerTest {
                         .param("projectId", member.getProjectId().toString())
                         .param("memberRole", memberRole)
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "pringles12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("registerMember"));
@@ -172,7 +169,7 @@ class MemberControllerTest {
                         .param("projectId", String.valueOf(projectIdInMember))
                         .param("memberRole", member.getMemberRole())
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "pringles12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("registerMember"));

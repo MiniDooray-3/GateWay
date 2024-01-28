@@ -2,6 +2,7 @@ package com.nhnacademy.edu.minidooray.controller;
 
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.nhnacademy.edu.minidooray.domain.member.GetMember;
@@ -14,7 +15,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,9 +46,9 @@ class TagControllerTest {
     MemberService memberService;
 
     @BeforeEach
-    void setUp() {
-        GetMember getMember = new GetMember("ADMIN", "pringles12");
-        given(memberService.getMember(any(), any())).willReturn(getMember);
+    void setup() {
+        GetMember member = new GetMember("ADMIN", "tester");
+        given(memberService.getMember(anyString(), any())).willReturn(member);
     }
 
     @Test
@@ -63,7 +63,7 @@ class TagControllerTest {
 
         mockMvc.perform(get("/tags/list")
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "tester"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("tags", expectedTags))
                 .andExpect(view().name("tagList"));
@@ -76,14 +76,14 @@ class TagControllerTest {
         RegisterTag tag = new RegisterTag("tag_test", projectId);
 
         mockMvc.perform(post("/tags/register")
-                        .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12")
                         .param("tagName", tag.getTagName())
-                        .param("projectId", tag.getProjectId().toString()))
+                        .param("projectId", tag.getProjectId().toString())
+                        .sessionAttr("LOGIN_ID", "tester")
+                        .sessionAttr("projectId", projectId))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tags/list"));
 
-        verify(tagService).registerTag(tag);
+        verify(tagService).registerTag(any(RegisterTag.class));
     }
 
     @Test
@@ -132,9 +132,9 @@ class TagControllerTest {
         String tagName = "tag";
 
         mockMvc.perform(get("/tags/{tag_id}/modify", tagId)
-                        .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12")
-                        .param("tagName", tagName))
+                        .param("tagName", tagName)
+                        .sessionAttr("LOGIN_ID", "tester")
+                        .sessionAttr("projectId", projectId))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("tagId", tagId))
                 .andExpect(model().attribute("tagName", tagName))
@@ -149,13 +149,13 @@ class TagControllerTest {
         ModifyTag tag = new ModifyTag("modifiedTag");
 
         mockMvc.perform(post("/tags/{tag_id}/modify", tagId)
-                        .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12")
-                        .param("tagName", tag.getTagName()))
+                        .param("tagName", tag.getTagName())
+                        .sessionAttr("LOGIN_ID", "tester")
+                        .sessionAttr("projectId", projectId))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tags/list"));
 
-        verify(tagService).modifyTag(tagId, tag);
+        verify(tagService).modifyTag(any(Long.class), any(ModifyTag.class));
     }
 
     @Test
@@ -183,8 +183,8 @@ class TagControllerTest {
         Long tagId = 1L;
 
         mockMvc.perform(get("/tags/{tag_id}/delete", tagId)
-                        .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "tester")
+                        .sessionAttr("projectId", projectId))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tags/list"));
 

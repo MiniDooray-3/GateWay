@@ -1,8 +1,8 @@
 package com.nhnacademy.edu.minidooray.controller;
 
+import com.nhnacademy.edu.minidooray.domain.tag.GetTag;
 import com.nhnacademy.edu.minidooray.domain.tag.ModifyTag;
 import com.nhnacademy.edu.minidooray.domain.tag.RegisterTag;
-import com.nhnacademy.edu.minidooray.domain.tag.GetTag;
 import com.nhnacademy.edu.minidooray.exception.ValidationFailedException;
 import com.nhnacademy.edu.minidooray.service.TagService;
 import java.util.List;
@@ -24,7 +24,7 @@ public class TagController {
 
     private final TagService tagService;
 
-    private final static String REDIRECT_URL = "redirect:/tags/list";
+    private static final String REDIRECT_URL = "redirect:/tags/list";
 
     public TagController(TagService tagService) {
         this.tagService = tagService;
@@ -64,7 +64,7 @@ public class TagController {
 
     @PostMapping("/{tag_id}/modify")
     public String modifyTag(@PathVariable("tag_id") Long tagId,
-                            @Valid  @ModelAttribute ModifyTag tag,
+                            @Valid @ModelAttribute ModifyTag tag,
                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
