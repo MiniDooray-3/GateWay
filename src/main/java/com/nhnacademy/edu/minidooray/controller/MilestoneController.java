@@ -21,13 +21,15 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 public class MilestoneController {
     private final MilestoneService milestoneService;
 
+    private static final String REDIRECT_URL = "redirect:/milestones/list";
+
     public MilestoneController(MilestoneService milestoneService) {
         this.milestoneService = milestoneService;
     }
 
     @PostMapping("/register")
     public String doMilestoneRegister(@Validated @ModelAttribute RegisterMilestone registerMilestone,
-                                            BindingResult bindingResult) {
+                                      BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
@@ -35,7 +37,7 @@ public class MilestoneController {
 
         milestoneService.createMilestone(registerMilestone);
 
-        return "redirect:/milestones/list";
+        return REDIRECT_URL;
     }
 
     @GetMapping("/list")
@@ -64,7 +66,7 @@ public class MilestoneController {
         }
         milestoneService.modifyMilestone(milestoneId, modifyMilestone);
 
-        return "redirect:/milestones/list";
+        return REDIRECT_URL;
     }
 
     @GetMapping("/{milestoneId}/delete")
@@ -72,6 +74,6 @@ public class MilestoneController {
 
         milestoneService.deleteMilestone(milestoneId);
 
-        return "redirect:/milestones/list";
+        return REDIRECT_URL;
     }
 }

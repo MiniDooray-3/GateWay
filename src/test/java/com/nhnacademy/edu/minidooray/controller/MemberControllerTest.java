@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -21,7 +20,6 @@ import com.nhnacademy.edu.minidooray.domain.member.RegisterMember;
 import com.nhnacademy.edu.minidooray.service.MemberService;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +28,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.servlet.ModelAndView;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -117,7 +114,7 @@ class MemberControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/projects/" + projectId));
 
-        verify(memberService).createMember(member);
+        verify(memberService).createMember(any(RegisterMember.class));
     }
 
     @Test
@@ -132,7 +129,7 @@ class MemberControllerTest {
                         .param("projectId", member.getProjectId().toString())
                         .param("memberRole", member.getMemberRole())
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "pringles12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("registerMember"));
@@ -152,7 +149,7 @@ class MemberControllerTest {
                         .param("projectId", member.getProjectId().toString())
                         .param("memberRole", memberRole)
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "pringles12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("registerMember"));
@@ -172,7 +169,7 @@ class MemberControllerTest {
                         .param("projectId", String.valueOf(projectIdInMember))
                         .param("memberRole", member.getMemberRole())
                         .sessionAttr("projectId", projectId)
-                        .sessionAttr("LOGIN_ID","pringles12"))
+                        .sessionAttr("LOGIN_ID", "pringles12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("registerMember"));

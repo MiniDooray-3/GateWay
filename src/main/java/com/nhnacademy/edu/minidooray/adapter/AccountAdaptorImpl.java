@@ -9,7 +9,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -44,9 +43,8 @@ public class AccountAdaptorImpl implements AccountAdaptor {
 
             return true;
         } catch (HttpClientErrorException.Unauthorized e) {
+            return false;
         }
-
-        return false;
     }
 
     @Override
@@ -56,15 +54,12 @@ public class AccountAdaptorImpl implements AccountAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<SignupUser> entity = new HttpEntity<>(signupUser, httpHeaders);
-        ResponseEntity<Void> exchange = restTemplate.exchange(accountProperties.getPort() + "/api/accounts/signup",
+        restTemplate.exchange(accountProperties.getPort() + "/api/accounts/signup",
                 HttpMethod.POST,
                 entity,
                 new ParameterizedTypeReference<>() {
                 });
 
-//        if (HttpStatus.OK != exchange.getStatusCode()) {
-//            throw new RuntimeException("유저 생성 실패");
-//        }
     }
 
     @Override

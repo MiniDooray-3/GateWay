@@ -4,7 +4,6 @@ import com.nhnacademy.edu.minidooray.domain.comment.CommentIdAndContent;
 import com.nhnacademy.edu.minidooray.domain.comment.CommentModifyRequest;
 import com.nhnacademy.edu.minidooray.domain.comment.CommentRegisterRequest;
 import com.nhnacademy.edu.minidooray.domain.comment.GetComments;
-import com.nhnacademy.edu.minidooray.domain.task.TaskOnlyId;
 import java.util.List;
 
 public interface CommentService {
