@@ -73,10 +73,6 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }, userId, projectId);
-
-        if (!HttpStatus.OK.equals(exchange.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
         return exchange.getBody();
     }
 
