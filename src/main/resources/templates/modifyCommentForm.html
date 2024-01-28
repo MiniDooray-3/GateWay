@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment - Modify</title>
+</head>
+<body>
+<form method="post" th:action="@{/comments/{comment_id}/modify(comment_id=${comment.commentId})}">
+    <textarea name="commentContent" th:text="${comment.commentContent}"></textarea>
+    <input type="submit" value="수정"/>
+</form>
+</body>
+</html>

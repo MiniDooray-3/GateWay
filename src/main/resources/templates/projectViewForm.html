@@ -37,5 +37,30 @@
         <input name="tagName" type="text" placeholder="등록할 태그">
         <button type="submit">등록</button>
     </form>
+    <form method="post" action="/projects/modify">
+        <span>프로젝트 상태 변경</span>
+        <select name="status" required>
+            <option value="" hidden th:text="${project.projectStatus}"></option>
+            <option value="활성">활성</option>
+            <option value="휴면">휴면</option>
+            <option value="종료">종료</option>
+        </select>
+
+        <button type="submit">수정</button>
+    </form>
+    <br/>
+    <h3>Task</h3>
+    <table class="table" style="width: 60%">
+        <tr>
+            <th>제목</th>
+            <th>MileStone</th>
+            <th>조회</th>
+        </tr>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.taskTitle}"></td>
+            <td><p th:if="${task.mileStone != null}" th:text="${task.mileStone.mileStoneStatus}"></p></td>
+            <td><a th:href="@{/tasks/{task_id}(task_id=${task.taskId})}">조회</a></td>
+        </tr>
+    </table>
 </body>
 </html>

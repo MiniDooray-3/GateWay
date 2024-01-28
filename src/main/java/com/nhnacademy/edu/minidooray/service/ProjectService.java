@@ -10,4 +10,6 @@ public interface ProjectService {
     List<Project> getProjects(String memberId);
 
     Project getProject(Long projectId);
+
+    void modifyStatus(Long projectId, String status);
 }

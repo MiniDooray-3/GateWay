@@ -9,11 +9,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -35,15 +33,12 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<RegisterMilestone> entity = new HttpEntity<>(registerMilestone, httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones",
+        restTemplate.exchange(taskProperties.getPort() + "/api/milestones",
                 HttpMethod.POST,
                 entity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 });
 
-        if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
-        }
     }
 
     @Override
@@ -53,15 +48,12 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<List<GetMilestone>> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + projectId,
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<>() {
-                });
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
-        }
+        ResponseEntity<List<GetMilestone>> response =
+                restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + projectId,
+                        HttpMethod.GET,
+                        entity,
+                        new ParameterizedTypeReference<>() {
+                        });
 
         return response.getBody();
     }
@@ -73,15 +65,11 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<ModifyMilestone> entity = new HttpEntity<>(modifyMilestone, httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/{milestoneId}" ,
+        restTemplate.exchange(taskProperties.getPort() + "/api/milestones/{milestoneId}",
                 HttpMethod.PUT,
                 entity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 }, milestoneId);
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
-        }
     }
 
     @Override
@@ -91,14 +79,10 @@ public class MilestoneAdaptorImpl implements MilestoneAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<Void> response = restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + milestoneId,
+        restTemplate.exchange(taskProperties.getPort() + "/api/milestones/" + milestoneId,
                 HttpMethod.DELETE,
                 entity,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 });
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new HttpClientErrorException(HttpStatus.CONFLICT);
-        }
     }
 }

@@ -33,12 +33,14 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<RegisterMember> requestEntity = new HttpEntity<>(member, httpHeaders);
+
         restTemplate.exchange(
                 taskProperties.getPort() + "/api/members/register",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<Void>() {
                 });
+
     }
 
     @Override
