@@ -73,6 +73,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }, userId, projectId);
+
         return exchange.getBody();
     }
 
