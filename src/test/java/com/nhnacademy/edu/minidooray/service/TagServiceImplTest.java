@@ -1,16 +1,20 @@
 package com.nhnacademy.edu.minidooray.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.nhnacademy.edu.minidooray.adapter.TagAdaptor;
+import com.nhnacademy.edu.minidooray.domain.member.GetMember;
 import com.nhnacademy.edu.minidooray.domain.tag.GetTag;
 import com.nhnacademy.edu.minidooray.domain.tag.ModifyTag;
 import com.nhnacademy.edu.minidooray.domain.tag.RegisterTag;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,7 @@ class TagServiceImplTest {
 
     @MockBean
     TagAdaptor tagAdaptor;
+
 
     @Test
     @DisplayName("태그 등록 - 성공")

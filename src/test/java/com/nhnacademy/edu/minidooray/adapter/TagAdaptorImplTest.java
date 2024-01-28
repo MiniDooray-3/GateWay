@@ -11,6 +11,7 @@ import com.nhnacademy.edu.minidooray.domain.tag.ModifyTag;
 import com.nhnacademy.edu.minidooray.domain.tag.RegisterTag;
 import com.nhnacademy.edu.minidooray.property.TaskProperties;
 import java.util.List;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,6 +38,7 @@ class TagAdaptorImplTest {
     TaskProperties taskProperties;
 
     @Test
+    @DisplayName("태그 등록 - 성공")
     void testRegisterTag() {
         RegisterTag tag = new RegisterTag("tag1", 1L);
 
@@ -64,6 +66,7 @@ class TagAdaptorImplTest {
     }
 
     @Test
+    @DisplayName("태그 수정 - 성공")
     void testModifyTag() {
         Long tagId = 1L;
         ModifyTag tag = new ModifyTag("tag1");
@@ -94,6 +97,7 @@ class TagAdaptorImplTest {
     }
 
     @Test
+    @DisplayName("태그 삭제 - 성공")
     void testDeleteTag() {
         Long tagId = 1L;
 
@@ -123,6 +127,7 @@ class TagAdaptorImplTest {
     }
 
     @Test
+    @DisplayName("태그 전체 조회 - 성공")
     void testGetTags() {
         Long projectId = 1L;
 
@@ -160,6 +165,7 @@ class TagAdaptorImplTest {
     }
 
     @Test
+    @DisplayName("태그 1개 조회 - 성공")
     void testGetTag() {
         Long tagId = 1L;
 

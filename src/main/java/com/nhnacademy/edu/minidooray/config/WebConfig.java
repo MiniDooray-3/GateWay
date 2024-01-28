@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+
     private final ApplicationContext applicationContext;
 
     public WebConfig(ApplicationContext applicationContext) {
@@ -35,6 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new ProjectMemberCheckInterceptorBefore(applicationContext))
                 .addPathPatterns("/projects/{projectId}")
                 .excludePathPatterns("/projects/list", "/projects/modify", "/projects/register");
+
     }
 
     @Bean
